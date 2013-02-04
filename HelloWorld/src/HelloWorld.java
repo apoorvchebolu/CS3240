@@ -3,6 +3,9 @@ import lejos.nxt.*;
 public class HelloWorld {
 
 	public static void main(String[] args){
+		
+		//test edit - Sam Feb4
+		
 		System.out.println("Hello World");
 		Button.waitForPress();
 		Motor.A.forward();
