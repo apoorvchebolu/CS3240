@@ -21,7 +21,7 @@ import lejos.robotics.navigation.DifferentialPilot;
 // marshall was here
 public class Activator extends Object{
 
-	private static boolean USBtest = false;
+	private static boolean USBtest = true;
 	
 	// Initialize all sensors here
 	private static Touch sTouch = new TouchSensor(SensorPort.S1);
