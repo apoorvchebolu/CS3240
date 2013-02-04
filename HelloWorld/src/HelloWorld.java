@@ -9,10 +9,13 @@ public class HelloWorld {
 		System.out.println("Hello World");
 		Button.waitForPress();
 		Motor.A.forward();
+		Motor.C.backward();
 		Button.waitForPress();
  		Motor.A.backward();
+ 		Motor.C.forward();
    		Button.waitForPress();
 		Motor.A.stop();
+		Motor.C.stop();
 		System.out.println("Finished");
 		Button.waitForPress();
 		
