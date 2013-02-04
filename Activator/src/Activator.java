@@ -15,7 +15,7 @@ import lejos.nxt.comm.NXTConnection;
 import lejos.nxt.comm.USB;
 import lejos.robotics.Touch;
 import lejos.robotics.navigation.DifferentialPilot;
-
+// apoorv was here
 public class Activator extends Object{
 
 	private static boolean USBtest = false;
