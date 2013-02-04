@@ -12,7 +12,7 @@ import lejos.pc.comm.NXTCommFactory;
 import lejos.pc.comm.NXTInfo;
 
 public class Controller {
-	private static boolean USBtest = false;
+	private static boolean USBtest = true;
 	static long start = 0, latency = 0;
 	static Boolean readFlag = true;
 	static Object lock = new Object();
