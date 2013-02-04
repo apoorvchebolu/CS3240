@@ -12,6 +12,5 @@ public class HelloWorld {
 		Motor.A.stop();
 		System.out.println("Finished");
 		Button.waitForPress();
-		
 	}
 }
