@@ -12,7 +12,7 @@ public class ControlTester {
 		while(!input.equals("disconnect")) {
 			System.out.println("Command acknowledged"); //replace "Command acknowledged" with the acknowledgment packet
 			if(input.length() > 0) {
-				switch(input.charAt(0)) {
+				switch(input.charAt(0)) { //the functions called in each case are responsible for checking the validity of the parameters.
 					case 'a': Opcodea(input);
 						break;
 					case 'b': Opcodeb(input);
@@ -20,7 +20,7 @@ public class ControlTester {
 					case 'c': Opcodec(input);
 						break;
 						//add cases for each opcode
-						
+					default: System.out.println("Opcode not recognized"); // executes if the opcode character is not a valid opcode
 
 				}
 			}
@@ -32,6 +32,7 @@ public class ControlTester {
 
 	}
 	public static void Opcodea(String input) {
+		//System.out.println("opcodea");
 		//do something with the input.  Any messages that would be sent back to the control station should be printed to the console instead until we have a control station to test.
 	}
 	public static void Opcodeb(String input) {
