@@ -69,9 +69,9 @@ public class ControlTester {
 						break;
 						case 'Q': OpcodeQ(input);
 						break;
-						case 'R': OpcodeQ(input);
+						case 'R': OpcodeR(input);
 						break;
-						case 'S': OpcodeQ(input);
+						case 'S': OpcodeS(input);
 						break;
 						default: System.out.println(malformedInputResponse(input)); // executes if the opcode character is not a valid opcode
 						incrementMessageNumber();
