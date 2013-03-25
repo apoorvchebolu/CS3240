@@ -13,8 +13,10 @@ public class MainControl {
 	
 	public MainControl() {
 		try {
-			connection = NXTCommFactory.createNXTComm(NXTCommFactory.USB);
-			info = connection.search("NXT", 1234);
+			//connection = NXTCommFactory.createNXTComm(NXTCommFactory.USB);
+			//info = connection.search(null, 0);
+			connection = NXTCommFactory.createNXTComm(NXTCommFactory.BLUETOOTH);
+			info = connection.search("LEAD4", 1111);
 		}
 		catch (NXTCommException e) {
 			System.out.println(e.toString());

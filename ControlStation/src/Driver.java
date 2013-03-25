@@ -1,15 +1,27 @@
+import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
+
 
 public class Driver {
 
-	/**
-	 * @param args
-	 */
 	public static void main(String[] args) {
-		MainControl mainControl = new MainControl();
+		
+		final MainControl mainControl = new MainControl();
 		BluetoothListener mainListener = new BluetoothListener(mainControl);
 		mainListener.start();
-		//add lines to create and start GUI here
-
+		
+		
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				JFrame frame = new JFrame("Control Station");
+				GUI controlPanel = new GUI(mainControl);
+				frame.setContentPane(controlPanel.createContentPane());
+				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				frame.setLocation(20,20);
+				frame.setSize(1000,600);
+				frame.setVisible(true);
+			}
+		});
 	}
 
 }

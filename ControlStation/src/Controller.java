@@ -73,6 +73,9 @@ public class Controller {
 	public void setSpeed(int speed) {
 		robotSpeed = speed;
 	}
+	public int getSpeed() {
+		return robotSpeed;
+	}
 	public void stop() {
 		if(connected) {
 			String opcode = "F";
