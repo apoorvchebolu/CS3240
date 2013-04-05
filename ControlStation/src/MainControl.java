@@ -1,6 +1,4 @@
 import lejos.pc.comm.NXTComm;
-import lejos.pc.comm.NXTCommException;
-import lejos.pc.comm.NXTCommFactory;
 import lejos.pc.comm.NXTInfo;
 
 public class MainControl {
@@ -9,20 +7,9 @@ public class MainControl {
 	private MessageHolder messageHolder;
 	private Controller controller;
 	private NXTComm connection;
-	private NXTInfo[] info;
 	
-	public MainControl() {
-		try {
-			//connection = NXTCommFactory.createNXTComm(NXTCommFactory.USB);
-			//info = connection.search(null, 0);
-			connection = NXTCommFactory.createNXTComm(NXTCommFactory.BLUETOOTH);
-			info = connection.search("LEAD4", 1111);
-		}
-		catch (NXTCommException e) {
-			System.out.println(e.toString());
-		}
-		controller = new Controller(connection, info);
-		controller.connect();
+	public MainControl() {		
+		controller = new Controller();
 		internalSensors = new InternalSensorDataHolder();
 		externalSensors = new ExternalSensorDataHolder();
 		messageHolder = new MessageHolder();

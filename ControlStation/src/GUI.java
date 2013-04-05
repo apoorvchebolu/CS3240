@@ -6,24 +6,25 @@ public class GUI
 {
 	static int padDisplaceX = 200;
 	static int padDisplaceY = 10;
-	
+
 	JPanel data1, data2, data3, buttons1, buttons2;
 	JLabel touch1label, touch2label, lightlabel, soundlabel, ultralabel;
 	JTextField touch1data, touch2data, lightdata, sounddata, ultradata;
 	JButton connect, home, requestdata, stop, forward, backward, left, right;
-	
+
 	MainControl control;
-	
+
 	public GUI(MainControl m)
 	{
 		control = m;
 	}
-	
+
 	public JPanel createContentPane (){
 		//panels
 		JPanel basepane = new JPanel();
 		basepane.setLayout(null);
-		
+
+
 		data1 = new JPanel();
 		data1.setLayout(null);
 		data1.setLocation(30,30);
@@ -35,13 +36,13 @@ public class GUI
 		data2.setLocation(280,30);
 		data2.setSize(200, 300);
 		basepane.add(data2);
-		
+
 		JPanel data3 = new JPanel();
 		data3.setLayout(null);
 		data3.setLocation(600,30);
 		data3.setSize(200, 300);
 		basepane.add(data3);
-		
+
 		JPanel buttons1 = new JPanel();
 		buttons1.setLayout(null);
 		buttons1.setLocation(30,400);
@@ -53,7 +54,7 @@ public class GUI
 		buttons2.setLocation(500,400);
 		buttons2.setSize(450, 200);
 		basepane.add(buttons2);
-		
+
 		//sensor data display
 		JLabel touch1label = new JLabel("Touch 1");
 		touch1label.setSize(100,50);
@@ -67,7 +68,7 @@ public class GUI
 		touch1data.setHorizontalAlignment(JTextField.RIGHT);
 		touch1data.setText("0");
 		data2.add(touch1data);
-		
+
 		JLabel touch2label = new JLabel("Touch 2");
 		touch2label.setSize(100,50);
 		touch2label.setLocation(0,60);
@@ -80,7 +81,7 @@ public class GUI
 		touch2data.setHorizontalAlignment(JTextField.RIGHT);
 		touch2data.setText("0");
 		data2.add(touch2data);
-		
+
 		JLabel lightlabel = new JLabel("Light");
 		lightlabel.setSize(100,50);
 		lightlabel.setLocation(0,120);
@@ -93,7 +94,7 @@ public class GUI
 		lightdata.setHorizontalAlignment(JTextField.RIGHT);
 		lightdata.setText("0");
 		data2.add(lightdata);
-		
+
 		JLabel soundlabel = new JLabel("Sound");
 		soundlabel.setSize(100,50);
 		soundlabel.setLocation(0,180);
@@ -106,7 +107,7 @@ public class GUI
 		sounddata.setHorizontalAlignment(JTextField.RIGHT);
 		sounddata.setText("0");
 		data2.add(sounddata);
-		
+
 		JLabel ultralabel = new JLabel("Ultrasonic");
 		ultralabel.setSize(100,50);
 		ultralabel.setLocation(0,240);
@@ -119,7 +120,7 @@ public class GUI
 		ultradata.setHorizontalAlignment(JTextField.RIGHT);
 		ultradata.setText("0");
 		data2.add(ultradata);
-		
+
 		//command log
 		final JTextField commlog = new JTextField();
 		commlog.setSize(200,300);
@@ -128,7 +129,7 @@ public class GUI
 		commlog.setHorizontalAlignment(0);
 		commlog.setText("Command log");
 		data3.add(commlog);
-		
+
 		//buttons
 		JButton connect = new JButton("Connect");
 		connect.setSize(120,60);
@@ -140,12 +141,12 @@ public class GUI
 			}
 		});
 		buttons1.add(connect);
-		
+
 		JButton home = new JButton("Home");
 		home.setSize(120,60);
 		home.setLocation(150,0);
 		buttons1.add(home);
-		
+
 		JButton requestdata = new JButton("Request System Data");
 		requestdata.setSize(180,40);
 		requestdata.setLocation(40,80);
@@ -157,7 +158,7 @@ public class GUI
 			}
 		});
 		buttons1.add(requestdata);
-		
+
 		JButton stop = new JButton("Stop");
 		stop.setSize(70,50);
 		stop.setLocation(10,20);
@@ -169,7 +170,7 @@ public class GUI
 			}
 		});
 		buttons2.add(stop);
-		
+
 		JButton forward = new JButton(" ^ ");
 		forward.setSize(50,50);
 		forward.setLocation(60+padDisplaceX, 0+padDisplaceY);
@@ -181,7 +182,7 @@ public class GUI
 			}
 		});
 		buttons2.add(forward);
-		
+
 		JButton backward = new JButton(" v ");
 		backward.setSize(50,50);
 		backward.setLocation(60+padDisplaceX, 60+padDisplaceY);
@@ -193,7 +194,7 @@ public class GUI
 			}
 		});
 		buttons2.add(backward);
-		
+
 		JButton left = new JButton(" < ");
 		left.setSize(50,50);
 		left.setLocation(0+padDisplaceX, 60+padDisplaceY);
@@ -205,7 +206,7 @@ public class GUI
 			}
 		});
 		buttons2.add(left);
-		
+
 		JButton right = new JButton(" > ");
 		right.setSize(50,50);
 		right.setLocation(120+padDisplaceX, 60+padDisplaceY);
@@ -217,6 +218,37 @@ public class GUI
 			}
 		});
 		buttons2.add(right);
+
+		basepane.addKeyListener(new KeyListener() {
+			public void keyPressed(KeyEvent e) {
+				switch(e.getKeyChar()) {
+				case KeyEvent.VK_UP:
+					control.getController().moveForward();
+					commlog.setText("Moving forward...");
+					break;
+				case KeyEvent.VK_DOWN:
+					control.getController().moveBackward();
+					commlog.setText("Moving backward...");
+					break;
+				case KeyEvent.VK_LEFT:
+					control.getController().moveLeft();
+					commlog.setText("Turning left...");
+					break;
+				case KeyEvent.VK_RIGHT:
+					control.getController().moveRight();
+					commlog.setText("Turning right...");
+					break;
+				}
+			}
+			public void keyReleased(KeyEvent e) {
+				control.getController().stop();
+				commlog.setText("Stopped");
+			}
+			public void keyTyped(KeyEvent e) {
+				
+			}
+		});
+
 		Timer timer = new Timer(50, new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				sounddata.setText("" + control.getExtSensor().getSound().getValue());
@@ -226,12 +258,12 @@ public class GUI
 			}
 		});
 		timer.start();
-		
+
 		basepane.setOpaque(true);
 		return basepane;
 	}
-	
-/*
+
+	/*
 public void actionPerformed(ActionEvent e)
 {
 	if(e.getSource() == stop)
@@ -247,9 +279,9 @@ public void actionPerformed(ActionEvent e)
 		commlog.setText("Requesting data...");
 	}
 }
-*/
-	
-/*
+	 */
+
+	/*
 public static void init()
 {
 	JFrame frame = new JFrame("Control Station");
@@ -268,5 +300,5 @@ public static void main(String[] args) {
 		}
 	});
 }
-*/
+	 */
 }

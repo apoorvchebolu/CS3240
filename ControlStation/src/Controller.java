@@ -1,6 +1,5 @@
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import lejos.pc.comm.NXTComm;
 import lejos.pc.comm.NXTCommException;
 import lejos.pc.comm.NXTCommFactory;
@@ -17,15 +16,25 @@ public class Controller {
 	private boolean connected;
 	private int robotSpeed;
 	private int currentRobotAngle;
-	public Controller(NXTComm conn, NXTInfo[] info) {
-		connection = conn;
-		this.info = info;
+	final private int maxNumberValue = 10000;
+	final private String zeroString = "0000";
+	public Controller() {
 		messageNumber = 0;
 		connected = false;
 		robotSpeed = 0;
 		currentRobotAngle = 0;
+		connect();
 	}
 	public void connect() {
+		try {
+			//connection = NXTCommFactory.createNXTComm(NXTCommFactory.USB);
+			//info = connection.search(null, 0);
+			connection = NXTCommFactory.createNXTComm(NXTCommFactory.BLUETOOTH);
+			info = connection.search("NXT", 1111);
+		}
+		catch (NXTCommException e) {
+			System.out.println(e.toString());
+		}
 		if (info.length == 0) {
 			System.out.println("Device not found");
 		}
@@ -46,7 +55,7 @@ public class Controller {
 	public void requestSystemStatusData() {
 		if(connected) {
 			String opcode = "S";
-			String message = messageSourceID + format4ByteNumber(messageNumber) + opcode;
+			String message = messageSourceID + intTo4CharacterString(messageNumber) + opcode;
 			String checksum = calculateChecksum(message);
 			message = headerString + checksum + message + endString;
 			try {
@@ -80,7 +89,7 @@ public class Controller {
 		if(connected) {
 			String opcode = "F";
 			String breakpoint = "" + (char)0 + (char)0 + (char)0 + (char)0;
-			String message = messageSourceID + format4ByteNumber(messageNumber) + opcode + breakpoint;
+			String message = messageSourceID + intTo4CharacterString(messageNumber) + opcode + breakpoint;
 			String checksum = calculateChecksum(message);
 			message = headerString + checksum + message + endString;
 			try {
@@ -96,10 +105,11 @@ public class Controller {
 		if(connected) {
 			String opcode = "C";
 			String breakpoint = "" + (char)0 + (char)0 + (char)0 + (char)0;
-			String message = messageSourceID + format4ByteNumber(messageNumber) + opcode + breakpoint + format4ByteNumber(robotSpeed);
+			String message = messageSourceID + intTo4CharacterString(messageNumber) + opcode + breakpoint + intTo4CharacterString(robotSpeed);
 			String checksum = calculateChecksum(message);
 			message = headerString + checksum + message + endString;
 			try {
+			//	message = "00000000A";
 				connectionOutputStream.write(message.getBytes());
 				connectionOutputStream.flush();
 				messageNumber++;
@@ -112,7 +122,7 @@ public class Controller {
 		if(connected) {
 			String opcode = "D";
 			String breakpoint = "" + (char)0 + (char)0 + (char)0 + (char)0;
-			String message = messageSourceID + format4ByteNumber(messageNumber) + opcode + breakpoint + format4ByteNumber(robotSpeed);
+			String message = messageSourceID + intTo4CharacterString(messageNumber) + opcode + breakpoint + intTo4CharacterString(robotSpeed);
 			String checksum = calculateChecksum(message);
 			message = headerString + checksum + message + endString;
 			try {
@@ -128,7 +138,7 @@ public class Controller {
 		if(connected) {
 			String opcode = "A";
 			String breakpoint = "" + (char)0 + (char)0 + (char)0 + (char)0;
-			String message = messageSourceID + format4ByteNumber(messageNumber) + opcode + breakpoint + format4ByteNumber(robotSpeed);
+			String message = messageSourceID + intTo4CharacterString(messageNumber) + opcode + breakpoint + intTo4CharacterString(robotSpeed);
 			String checksum = calculateChecksum(message);
 			message = headerString + checksum + message + endString;
 			try {
@@ -144,7 +154,7 @@ public class Controller {
 		if(connected) {
 			String opcode = "B";
 			String breakpoint = "" + (char)0 + (char)0 + (char)0 + (char)0;
-			String message = messageSourceID + format4ByteNumber(messageNumber) + opcode + breakpoint + format4ByteNumber(robotSpeed);
+			String message = messageSourceID + intTo4CharacterString(messageNumber) + opcode + breakpoint + intTo4CharacterString(robotSpeed);
 			String checksum = calculateChecksum(message);
 			message = headerString + checksum + message + endString;
 			try {
@@ -159,7 +169,7 @@ public class Controller {
 	public void executionResponseAcknowledgment(String messageIDParameter) {
 		if(connected) {
 			String opcode = "O";
-			String message = messageSourceID + format4ByteNumber(messageNumber) + opcode + messageIDParameter;
+			String message = messageSourceID + intTo4CharacterString(messageNumber) + opcode + messageIDParameter;
 			String checksum = calculateChecksum(message);
 			message = headerString + checksum + message + endString;
 			try {
@@ -174,7 +184,7 @@ public class Controller {
 	public void systemStatusAcknowledgment(String messageIDParameter) {
 		if(connected) {
 			String opcode = "P";
-			String message = messageSourceID + format4ByteNumber(messageNumber) + opcode + messageIDParameter;
+			String message = messageSourceID + intTo4CharacterString(messageNumber) + opcode + messageIDParameter;
 			String checksum = calculateChecksum(message);
 			message = headerString + checksum + message + endString;
 			try {
@@ -189,7 +199,7 @@ public class Controller {
 	public void eventErrorAcknowledgment(String messageIDParameter) {
 		if(connected) {
 			String opcode = "Q";
-			String message = messageSourceID + format4ByteNumber(messageNumber) + opcode + messageIDParameter;
+			String message = messageSourceID + intTo4CharacterString(messageNumber) + opcode + messageIDParameter;
 			String checksum = calculateChecksum(message);
 			message = headerString + checksum + message + endString;
 			try {
@@ -202,10 +212,10 @@ public class Controller {
 		}
 	}
 
-	private String format4ByteNumber(int number) {
+	/*private String format4ByteNumber(int number) {
 		return "" + (char)((number/16777216)%256) + (char)((number/65536)%256) +
 				(char)((number/256)%256) + (char)((number)%256);
-	}
+	}*/
 	public String calculateChecksum(String messageContent) {
 		int checksum = 0;
 		for(int i = 0; i < messageContent.length(); i++) {
@@ -213,7 +223,14 @@ public class Controller {
 		}
 		return formatChecksum(checksum);
 	}
-	private static String formatChecksum(int checksum) {
-		return "" + (char)((checksum/256)%256) + (char)(checksum %256);
+	private String formatChecksum(int checksum) {
+		String checksumString = "" + checksum % 100;
+		checksumString = zeroString.substring(0, 2 - checksumString.length()) + checksumString;
+		return checksumString;
+	}
+	private String intTo4CharacterString(int numberToConvert) {
+		String numberAsString = "" + numberToConvert%maxNumberValue;
+		numberAsString = zeroString.substring(0, 4 - numberAsString.length()) + numberAsString;
+		return numberAsString;
 	}
 }
