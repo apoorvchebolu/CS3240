@@ -1,11 +1,14 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+
 import javax.swing.*;
 
 public class GUI
 {
 	static int padDisplaceX = 200;
 	static int padDisplaceY = 10;
+	private ArrayList<Character> keysCurrentlyPressed;
 
 	JPanel data1, data2, data3, buttons1, buttons2;
 	JLabel touch1label, touch2label, lightlabel, soundlabel, ultralabel;
@@ -17,6 +20,7 @@ public class GUI
 	public GUI(MainControl m)
 	{
 		control = m;
+		keysCurrentlyPressed = new ArrayList<Character>();
 	}
 
 	public JPanel createContentPane (){
@@ -221,33 +225,49 @@ public class GUI
 
 		basepane.addKeyListener(new KeyListener() {
 			public void keyPressed(KeyEvent e) {
-				switch(e.getKeyChar()) {
-				case KeyEvent.VK_UP:
-					control.getController().moveForward();
-					commlog.setText("Moving forward...");
-					break;
-				case KeyEvent.VK_DOWN:
-					control.getController().moveBackward();
-					commlog.setText("Moving backward...");
-					break;
-				case KeyEvent.VK_LEFT:
-					control.getController().moveLeft();
-					commlog.setText("Turning left...");
-					break;
-				case KeyEvent.VK_RIGHT:
-					control.getController().moveRight();
-					commlog.setText("Turning right...");
-					break;
+				//System.out.println(e.getKeyCode());
+				int keyCode = e.getKeyCode();
+				if(keyCode == KeyEvent.VK_W || keyCode == KeyEvent.VK_UP) {
+					if(!keysCurrentlyPressed.contains(new Character('w'))) {
+						control.getController().moveForward();
+						commlog.setText("Moving forward...");
+						keysCurrentlyPressed.add(new Character('w'));
+					}
+				}
+
+				else if(keyCode == KeyEvent.VK_S || keyCode == KeyEvent.VK_DOWN) {
+					if(!keysCurrentlyPressed.contains(new Character('s'))) {
+						control.getController().moveBackward();
+						commlog.setText("Moving backward...");
+						keysCurrentlyPressed.add(new Character('s'));
+					}
+				}
+				else if(keyCode == KeyEvent.VK_A || keyCode == KeyEvent.VK_LEFT) {
+					if(!keysCurrentlyPressed.contains(new Character('a'))) {
+						control.getController().moveLeft();
+						commlog.setText("Turning left...");
+						keysCurrentlyPressed.add(new Character('a'));
+					}
+				}
+				else if(keyCode == KeyEvent.VK_D || keyCode == KeyEvent.VK_RIGHT) {
+					if(!keysCurrentlyPressed.contains(new Character('d'))) {
+						control.getController().moveRight();
+						commlog.setText("Turning right...");
+						keysCurrentlyPressed.add(new Character('d'));
+					}
 				}
 			}
 			public void keyReleased(KeyEvent e) {
+				keysCurrentlyPressed.remove(new Character(e.getKeyChar()));
 				control.getController().stop();
 				commlog.setText("Stopped");
 			}
 			public void keyTyped(KeyEvent e) {
-				
+
 			}
 		});
+		basepane.setFocusable(true);
+		basepane.requestFocusInWindow();
 
 		Timer timer = new Timer(50, new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

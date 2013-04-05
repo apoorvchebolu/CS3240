@@ -20,7 +20,9 @@ public class BluetoothListener extends Thread {
 		mainControl = m;
 		stopRequest = false;
 		connection = mainControl.getConnection();
-		connectionInput = new DataInputStream(connection.getInputStream());
+		if(connection != null) {
+			connectionInput = new DataInputStream(connection.getInputStream());
+		}
 	}
 	public void run() {
 		while(!stopRequest) {
