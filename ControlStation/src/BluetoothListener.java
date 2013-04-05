@@ -68,15 +68,15 @@ public class BluetoothListener extends Thread {
 		}
 	}
 	private void processSystemStatusData(String message) {
-		int ultrasonicValue = convert4BytesToInteger(message.substring(9, 13));
-		int lightValue = convert4BytesToInteger(message.substring(13, 17));
-		int soundValue = convert4BytesToInteger(message.substring(17, 21));
-		int touchAValue = (int)(message.charAt(21));
+		int ultrasonicValue = Integer.parseInt(message.substring(9, 13));
+		int lightValue = Integer.parseInt(message.substring(13, 17));
+		int soundValue = Integer.parseInt(message.substring(17, 21));
+		int touchAValue = Integer.parseInt(message.substring(21,22));
 		//	int touchBValue = (int)(message.charAt(22));
-		int batteryValue = convert4BytesToInteger(message.substring(23, 27));
-		int signalStrength = convert4BytesToInteger(message.substring(27, 31));
-		int positionX = convert4BytesToInteger(message.substring(31, 35));
-		int positionY = convert4BytesToInteger(message.substring(35, 39));
+		int batteryValue = Integer.parseInt(message.substring(23, 27));
+		int signalStrength = Integer.parseInt(message.substring(27, 31));
+		int positionX = Integer.parseInt(message.substring(31, 35));
+		int positionY = Integer.parseInt(message.substring(35, 39));
 		mainControl.getExtSensor().getUltrasonic().setValue(ultrasonicValue);
 		mainControl.getExtSensor().getLight().setValue(lightValue);
 		mainControl.getExtSensor().getSound().setValue(soundValue);
@@ -86,7 +86,7 @@ public class BluetoothListener extends Thread {
 		mainControl.getIntSensor().getPositionX().setValue(positionX);
 		mainControl.getIntSensor().getPositionY().setValue(positionY);
 	}
-	private int convert4BytesToInteger(String bytes) {
+	/*private int convert4BytesToInteger(String bytes) {
 		return (int)(bytes.charAt(3)) + (int)(bytes.charAt(2)) * 256 + (int)(bytes.charAt(1)) * 65536 + (int)(bytes.charAt(0)) * 16777216;
-	}
+	}*/
 }

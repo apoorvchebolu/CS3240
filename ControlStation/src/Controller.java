@@ -88,7 +88,7 @@ public class Controller {
 	public void stop() {
 		if(connected) {
 			String opcode = "F";
-			String breakpoint = "" + (char)0 + (char)0 + (char)0 + (char)0;
+			String breakpoint = zeroString;
 			String message = messageSourceID + intTo4CharacterString(messageNumber) + opcode + breakpoint;
 			String checksum = calculateChecksum(message);
 			message = headerString + checksum + message + endString;
@@ -104,7 +104,7 @@ public class Controller {
 	public void moveForward() {
 		if(connected) {
 			String opcode = "C";
-			String breakpoint = "" + (char)0 + (char)0 + (char)0 + (char)0;
+			String breakpoint = zeroString;
 			String message = messageSourceID + intTo4CharacterString(messageNumber) + opcode + breakpoint + intTo4CharacterString(robotSpeed);
 			String checksum = calculateChecksum(message);
 			message = headerString + checksum + message + endString;
@@ -121,7 +121,7 @@ public class Controller {
 	public void moveBackward() {
 		if(connected) {
 			String opcode = "D";
-			String breakpoint = "" + (char)0 + (char)0 + (char)0 + (char)0;
+			String breakpoint = zeroString;
 			String message = messageSourceID + intTo4CharacterString(messageNumber) + opcode + breakpoint + intTo4CharacterString(robotSpeed);
 			String checksum = calculateChecksum(message);
 			message = headerString + checksum + message + endString;
@@ -137,7 +137,7 @@ public class Controller {
 	public void moveLeft() {
 		if(connected) {
 			String opcode = "A";
-			String breakpoint = "" + (char)0 + (char)0 + (char)0 + (char)0;
+			String breakpoint = zeroString;
 			String message = messageSourceID + intTo4CharacterString(messageNumber) + opcode + breakpoint + intTo4CharacterString(robotSpeed);
 			String checksum = calculateChecksum(message);
 			message = headerString + checksum + message + endString;
@@ -153,7 +153,7 @@ public class Controller {
 	public void moveRight() {
 		if(connected) {
 			String opcode = "B";
-			String breakpoint = "" + (char)0 + (char)0 + (char)0 + (char)0;
+			String breakpoint = zeroString;
 			String message = messageSourceID + intTo4CharacterString(messageNumber) + opcode + breakpoint + intTo4CharacterString(robotSpeed);
 			String checksum = calculateChecksum(message);
 			message = headerString + checksum + message + endString;
