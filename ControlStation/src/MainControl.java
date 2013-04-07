@@ -6,7 +6,6 @@ public class MainControl {
 	private ExternalSensorDataHolder externalSensors;
 	private MessageHolder messageHolder;
 	private Controller controller;
-	private NXTComm connection;
 	
 	public MainControl() {		
 		controller = new Controller();
@@ -25,8 +24,5 @@ public class MainControl {
 	}
 	public Controller getController() {
 		return controller;
-	}
-	public NXTComm getConnection() {
-		return connection;
 	}
 }

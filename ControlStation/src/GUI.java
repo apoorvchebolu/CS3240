@@ -8,7 +8,7 @@ public class GUI
 {
 	static int padDisplaceX = 200;
 	static int padDisplaceY = 10;
-	private ArrayList<Character> keysCurrentlyPressed;
+	private ArrayList<String> keysCurrentlyPressed;
 
 	JPanel data1, data2, data3, buttons1, buttons2;
 	JLabel touch1label, touch2label, lightlabel, soundlabel, ultralabel;
@@ -20,7 +20,7 @@ public class GUI
 	public GUI(MainControl m)
 	{
 		control = m;
-		keysCurrentlyPressed = new ArrayList<Character>();
+		keysCurrentlyPressed = new ArrayList<String>();
 	}
 
 	public JPanel createContentPane (){
@@ -228,37 +228,53 @@ public class GUI
 				//System.out.println(e.getKeyCode());
 				int keyCode = e.getKeyCode();
 				if(keyCode == KeyEvent.VK_W || keyCode == KeyEvent.VK_UP) {
-					if(!keysCurrentlyPressed.contains(new Character('w'))) {
+					if(!keysCurrentlyPressed.contains("up")) {
 						control.getController().moveForward();
 						commlog.setText("Moving forward...");
-						keysCurrentlyPressed.add(new Character('w'));
+						keysCurrentlyPressed.add("up");
 					}
 				}
 
 				else if(keyCode == KeyEvent.VK_S || keyCode == KeyEvent.VK_DOWN) {
-					if(!keysCurrentlyPressed.contains(new Character('s'))) {
+					if(!keysCurrentlyPressed.contains("down")) {
 						control.getController().moveBackward();
 						commlog.setText("Moving backward...");
-						keysCurrentlyPressed.add(new Character('s'));
+						keysCurrentlyPressed.add("down");
 					}
 				}
 				else if(keyCode == KeyEvent.VK_A || keyCode == KeyEvent.VK_LEFT) {
-					if(!keysCurrentlyPressed.contains(new Character('a'))) {
+					if(!keysCurrentlyPressed.contains("left")) {
 						control.getController().moveLeft();
 						commlog.setText("Turning left...");
-						keysCurrentlyPressed.add(new Character('a'));
+						keysCurrentlyPressed.add("left");
 					}
 				}
 				else if(keyCode == KeyEvent.VK_D || keyCode == KeyEvent.VK_RIGHT) {
-					if(!keysCurrentlyPressed.contains(new Character('d'))) {
+					if(!keysCurrentlyPressed.contains("right")) {
 						control.getController().moveRight();
 						commlog.setText("Turning right...");
-						keysCurrentlyPressed.add(new Character('d'));
+						keysCurrentlyPressed.add("right");
 					}
 				}
 			}
 			public void keyReleased(KeyEvent e) {
-				keysCurrentlyPressed.remove(new Character(e.getKeyChar()));
+				String command = "";
+				int keyCode = e.getKeyCode();
+				if(keyCode == KeyEvent.VK_W || keyCode == KeyEvent.VK_UP) {
+					command = "up";
+				}
+				else if(keyCode == KeyEvent.VK_S || keyCode == KeyEvent.VK_DOWN) {
+					command = "down";
+				}
+				else if(keyCode == KeyEvent.VK_A || keyCode == KeyEvent.VK_LEFT) {
+					command = "left";
+				}
+				else if(keyCode == KeyEvent.VK_D || keyCode == KeyEvent.VK_RIGHT) {
+					command = "right";
+				}
+				
+				keysCurrentlyPressed.remove(command);
+				//System.out.println(keysCurrentlyPressed);
 				control.getController().stop();
 				commlog.setText("Stopped");
 			}

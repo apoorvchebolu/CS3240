@@ -19,10 +19,8 @@ public class BluetoothListener extends Thread {
 	public BluetoothListener(MainControl m) {
 		mainControl = m;
 		stopRequest = false;
-		connection = mainControl.getConnection();
-		if(connection != null) {
-			connectionInput = new DataInputStream(connection.getInputStream());
-		}
+		connection = mainControl.getController().getConnection();
+		connectionInput = new DataInputStream(connection.getInputStream());
 	}
 	public void run() {
 		while(!stopRequest) {
@@ -40,6 +38,7 @@ public class BluetoothListener extends Thread {
 		}
 	}
 	private void processMessage(String message) {
+		System.out.println(message);
 		if(message.length() > 8) {
 			char opcode = message.charAt(opcodeIndex);
 			char messageSourceID = message.charAt(messageSourceIDIndex);

@@ -30,7 +30,7 @@ public class Controller {
 			//connection = NXTCommFactory.createNXTComm(NXTCommFactory.USB);
 			//info = connection.search(null, 0);
 			connection = NXTCommFactory.createNXTComm(NXTCommFactory.BLUETOOTH);
-			info = connection.search("NXT", 1111);
+			info = connection.search("LEAD4", 1111);
 		}
 		catch (NXTCommException e) {
 			System.out.println(e.toString());
@@ -109,7 +109,6 @@ public class Controller {
 			String checksum = calculateChecksum(message);
 			message = headerString + checksum + message + endString;
 			try {
-			//	message = "00000000A";
 				connectionOutputStream.write(message.getBytes());
 				connectionOutputStream.flush();
 				messageNumber++;
@@ -232,5 +231,8 @@ public class Controller {
 		String numberAsString = "" + numberToConvert%maxNumberValue;
 		numberAsString = zeroString.substring(0, 4 - numberAsString.length()) + numberAsString;
 		return numberAsString;
+	}
+	public NXTComm getConnection() {
+		return connection;
 	}
 }
