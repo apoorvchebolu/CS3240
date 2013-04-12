@@ -8,7 +8,7 @@ public class MainControl {
 	private Controller controller;
 	
 	public MainControl() {		
-		controller = new Controller();
+		controller = new Controller(this);
 		internalSensors = new InternalSensorDataHolder();
 		externalSensors = new ExternalSensorDataHolder();
 		messageHolder = new MessageHolder();

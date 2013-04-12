@@ -105,9 +105,7 @@ public class Controller {
 			String message = messageSourceID + intTo4CharacterString(messageNumber) + opcode + breakpoint + intTo4CharacterString(robotSpeed);
 			String checksum = calculateChecksum(message);
 			message = headerString + checksum + message + endString;
-<<<<<<< HEAD
 			sendMessage(message);
-=======
 			try {
 				connectionOutputStream.write(message.getBytes());
 				connectionOutputStream.flush();
@@ -115,7 +113,6 @@ public class Controller {
 			} catch (IOException e) {
 				System.out.println(e.toString());
 			}
->>>>>>> branch 'master' of https://github.com/apche93/CS3240.git
 		}
 	}
 	
@@ -188,10 +185,6 @@ public class Controller {
 		}
 	}
 
-	/*private String format4ByteNumber(int number) {
-		return "" + (char)((number/16777216)%256) + (char)((number/65536)%256) +
-				(char)((number/256)%256) + (char)((number)%256);
-	}*/
 	private void sendMessage(String message) {
 		try {
 			connectionOutputStream.write(message.getBytes());

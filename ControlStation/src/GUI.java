@@ -8,13 +8,10 @@ public class GUI
 {
 	static int padDisplaceX = 200;
 	static int padDisplaceY = 10;
-<<<<<<< HEAD
 	static String newline = "\n";
 	
-=======
 	private ArrayList<String> keysCurrentlyPressed;
 
->>>>>>> branch 'master' of https://github.com/apche93/CS3240.git
 	JPanel data1, data2, data3, buttons1, buttons2;
 	JLabel touch1label, touch2label, lightlabel, soundlabel, ultralabel;
 	JTextField touch1data, touch2data, lightdata, sounddata, ultradata;
@@ -140,15 +137,12 @@ public class GUI
 		ultradata.setText("0");
 		data2.add(ultradata);
 
-<<<<<<< HEAD
 		//command log
 		commlog = new JTextArea();
 		commlog.setSize(300,300);
-=======
 		//command log display
 		final JTextField commlog = new JTextField();
 		commlog.setSize(200,300);
->>>>>>> branch 'master' of https://github.com/apche93/CS3240.git
 		commlog.setLocation(0,0);
 		commlog.setEditable(false);
 		//commlog.setHorizontalAlignment(0);
@@ -338,43 +332,4 @@ public class GUI
 		basepane.setOpaque(true);
 		return basepane;
 	}
-
-	/*
-public void actionPerformed(ActionEvent e)
-{
-	if(e.getSource() == stop)
-	{
-		commlog.setText("Stopped");
-	}
-	else if(e.getSource() == forward)
-	{
-		commlog.setText("Moving forward...");
-	}
-	else if(e.getSource() == requestdata)
-	{
-		commlog.setText("Requesting data...");
-	}
-}
-	 */
-
-	/*
-public static void init()
-{
-	JFrame frame = new JFrame("Control Station");
-	GUI controlPanel = new GUI();
-	frame.setContentPane(controlPanel.createContentPane());
-	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	frame.setLocation(20,20);
-	frame.setSize(1000,600);
-	frame.setVisible(true);
-}
-
-public static void main(String[] args) {	
-	SwingUtilities.invokeLater(new Runnable() {
-		public void run() {
-			init();
-		}
-	});
-}
-	 */
 }
