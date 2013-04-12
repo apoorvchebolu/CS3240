@@ -6,12 +6,13 @@ public class GUI
 {
 	static int padDisplaceX = 200;
 	static int padDisplaceY = 10;
-
+	static String newline = "\n";
+	
 	JPanel data1, data2, data3, buttons1, buttons2;
 	JLabel touch1label, touch2label, lightlabel, soundlabel, ultralabel;
 	JTextField touch1data, touch2data, lightdata, sounddata, ultradata;
 	JButton connect, home, requestdata, stop, forward, backward, left, right;
-
+	JTextArea commlog;
 	MainControl control;
 
 	public GUI(MainControl m)
@@ -122,13 +123,16 @@ public class GUI
 		data2.add(ultradata);
 
 		//command log
-		final JTextField commlog = new JTextField();
-		commlog.setSize(200,300);
+		commlog = new JTextArea();
+		commlog.setSize(300,300);
 		commlog.setLocation(0,0);
 		commlog.setEditable(false);
-		commlog.setHorizontalAlignment(0);
-		commlog.setText("Command log");
-		data3.add(commlog);
+		//commlog.setHorizontalAlignment(0);
+		commlog.setText(" --Control Station online-- " + newline);
+		JScrollPane commlogpane = new JScrollPane(commlog);
+		commlogpane.setSize(300,300);
+		commlogpane.setVerticalScrollBarPolicy ( ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS );
+		data3.add(commlogpane);
 
 		//buttons
 		JButton connect = new JButton("Connect");
@@ -245,7 +249,7 @@ public class GUI
 				commlog.setText("Stopped");
 			}
 			public void keyTyped(KeyEvent e) {
-				
+
 			}
 		});
 

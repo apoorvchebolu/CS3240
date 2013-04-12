@@ -46,6 +46,7 @@ public class BluetoothListener extends Thread {
 			String messageContent = message.substring(messageSourceIDIndex, message.length());
 			String calculatedChecksum = mainControl.getController().calculateChecksum(messageContent);
 			if(calculatedChecksum.equals(receivedChecksum) && messageSourceID == 'R') {
+				mainControl.getMessageHolder().addMessage(new Message("Received", message));
 				switch(opcode) {
 				case 'K': //system status data package
 					processSystemStatusData(message);

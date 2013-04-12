@@ -8,6 +8,7 @@ import lejos.pc.comm.NXTInfo;
 public class Controller {
 	private NXTComm connection;
 	private NXTInfo[] info;
+	private MainControl mainControl;
 	private DataOutputStream connectionOutputStream;
 	private String headerString = "#";
 	private String messageSourceID = "S";
@@ -15,15 +16,17 @@ public class Controller {
 	private int messageNumber;
 	private boolean connected;
 	private int robotSpeed;
-	private int currentRobotAngle;
+	private int currentRobotAngle;	
 	final private int maxNumberValue = 10000;
 	final private String zeroString = "0000";
-	public Controller() {
+	
+	public Controller(MainControl mainControl) {
 		messageNumber = 0;
 		connected = false;
 		robotSpeed = 0;
 		currentRobotAngle = 0;
 		connect();
+		this.mainControl = mainControl;
 	}
 	public void connect() {
 		try {
@@ -58,13 +61,7 @@ public class Controller {
 			String message = messageSourceID + intTo4CharacterString(messageNumber) + opcode;
 			String checksum = calculateChecksum(message);
 			message = headerString + checksum + message + endString;
-			try {
-				connectionOutputStream.write(message.getBytes());
-				connectionOutputStream.flush();
-				messageNumber++;
-			} catch (IOException e) {
-				System.out.println(e.toString());
-			}
+			sendMessage(message);
 		}
 	}
 	public void turn90Left() {
@@ -92,13 +89,7 @@ public class Controller {
 			String message = messageSourceID + intTo4CharacterString(messageNumber) + opcode + breakpoint;
 			String checksum = calculateChecksum(message);
 			message = headerString + checksum + message + endString;
-			try {
-				connectionOutputStream.write(message.getBytes());
-				connectionOutputStream.flush();
-				messageNumber++;
-			} catch (IOException e) {
-				System.out.println(e.toString());
-			}
+			sendMessage(message);
 		}
 	}
 	public void moveForward() {
@@ -108,14 +99,7 @@ public class Controller {
 			String message = messageSourceID + intTo4CharacterString(messageNumber) + opcode + breakpoint + intTo4CharacterString(robotSpeed);
 			String checksum = calculateChecksum(message);
 			message = headerString + checksum + message + endString;
-			try {
-			//	message = "00000000A";
-				connectionOutputStream.write(message.getBytes());
-				connectionOutputStream.flush();
-				messageNumber++;
-			} catch (IOException e) {
-				System.out.println(e.toString());
-			}
+			sendMessage(message);
 		}
 	}
 	public void moveBackward() {
@@ -125,13 +109,7 @@ public class Controller {
 			String message = messageSourceID + intTo4CharacterString(messageNumber) + opcode + breakpoint + intTo4CharacterString(robotSpeed);
 			String checksum = calculateChecksum(message);
 			message = headerString + checksum + message + endString;
-			try {
-				connectionOutputStream.write(message.getBytes());
-				connectionOutputStream.flush();
-				messageNumber++;
-			} catch (IOException e) {
-				System.out.println(e.toString());
-			}
+			sendMessage(message);
 		}
 	}
 	public void moveLeft() {
@@ -141,13 +119,7 @@ public class Controller {
 			String message = messageSourceID + intTo4CharacterString(messageNumber) + opcode + breakpoint + intTo4CharacterString(robotSpeed);
 			String checksum = calculateChecksum(message);
 			message = headerString + checksum + message + endString;
-			try {
-				connectionOutputStream.write(message.getBytes());
-				connectionOutputStream.flush();
-				messageNumber++;
-			} catch (IOException e) {
-				System.out.println(e.toString());
-			}
+			sendMessage(message);
 		}
 	}
 	public void moveRight() {
@@ -157,13 +129,7 @@ public class Controller {
 			String message = messageSourceID + intTo4CharacterString(messageNumber) + opcode + breakpoint + intTo4CharacterString(robotSpeed);
 			String checksum = calculateChecksum(message);
 			message = headerString + checksum + message + endString;
-			try {
-				connectionOutputStream.write(message.getBytes());
-				connectionOutputStream.flush();
-				messageNumber++;
-			} catch (IOException e) {
-				System.out.println(e.toString());
-			}
+			sendMessage(message);
 		}
 	}
 	public void executionResponseAcknowledgment(String messageIDParameter) {
@@ -172,13 +138,7 @@ public class Controller {
 			String message = messageSourceID + intTo4CharacterString(messageNumber) + opcode + messageIDParameter;
 			String checksum = calculateChecksum(message);
 			message = headerString + checksum + message + endString;
-			try {
-				connectionOutputStream.write(message.getBytes());
-				connectionOutputStream.flush();
-				messageNumber++;
-			} catch (IOException e) {
-				System.out.println(e.toString());
-			}
+			sendMessage(message);
 		}
 	}
 	public void systemStatusAcknowledgment(String messageIDParameter) {
@@ -187,13 +147,7 @@ public class Controller {
 			String message = messageSourceID + intTo4CharacterString(messageNumber) + opcode + messageIDParameter;
 			String checksum = calculateChecksum(message);
 			message = headerString + checksum + message + endString;
-			try {
-				connectionOutputStream.write(message.getBytes());
-				connectionOutputStream.flush();
-				messageNumber++;
-			} catch (IOException e) {
-				System.out.println(e.toString());
-			}
+			sendMessage(message);
 		}
 	}
 	public void eventErrorAcknowledgment(String messageIDParameter) {
@@ -202,13 +156,7 @@ public class Controller {
 			String message = messageSourceID + intTo4CharacterString(messageNumber) + opcode + messageIDParameter;
 			String checksum = calculateChecksum(message);
 			message = headerString + checksum + message + endString;
-			try {
-				connectionOutputStream.write(message.getBytes());
-				connectionOutputStream.flush();
-				messageNumber++;
-			} catch (IOException e) {
-				System.out.println(e.toString());
-			}
+			sendMessage(message);
 		}
 	}
 
@@ -216,6 +164,17 @@ public class Controller {
 		return "" + (char)((number/16777216)%256) + (char)((number/65536)%256) +
 				(char)((number/256)%256) + (char)((number)%256);
 	}*/
+	private void sendMessage(String message) {
+		try {
+			connectionOutputStream.write(message.getBytes());
+			connectionOutputStream.flush();
+			messageNumber++;
+		} catch (IOException e) {
+			System.out.println(e.toString());
+		}
+		mainControl.getMessageHolder().addMessage(new Message("Sent", message));
+		
+	}
 	public String calculateChecksum(String messageContent) {
 		int checksum = 0;
 		for(int i = 0; i < messageContent.length(); i++) {
