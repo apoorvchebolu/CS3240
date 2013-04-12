@@ -1,13 +1,20 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+
 import javax.swing.*;
 
 public class GUI
 {
 	static int padDisplaceX = 200;
 	static int padDisplaceY = 10;
+<<<<<<< HEAD
 	static String newline = "\n";
 	
+=======
+	private ArrayList<String> keysCurrentlyPressed;
+
+>>>>>>> branch 'master' of https://github.com/apche93/CS3240.git
 	JPanel data1, data2, data3, buttons1, buttons2;
 	JLabel touch1label, touch2label, lightlabel, soundlabel, ultralabel;
 	JTextField touch1data, touch2data, lightdata, sounddata, ultradata;
@@ -18,38 +25,45 @@ public class GUI
 	public GUI(MainControl m)
 	{
 		control = m;
+		keysCurrentlyPressed = new ArrayList<String>();
 	}
 
-	public JPanel createContentPane (){
+	public JPanel createContentPane (){  //Initialize the objects in the GUI, including buttons, labels, and 
+											//action listeners
+		
 		//panels
-		JPanel basepane = new JPanel();
+		final JPanel basepane = new JPanel();
 		basepane.setLayout(null);
 
-
+		//To be used to display internal sensor data (battery level, signal strength)
 		data1 = new JPanel();
 		data1.setLayout(null);
 		data1.setLocation(30,30);
 		data1.setSize(200, 300);
 		basepane.add(data1);
 
+		//Used to contain display objects for external sensor data values (touch, sound, light, ultrasonic)
 		JPanel data2 = new JPanel();
 		data2.setLayout(null);
 		data2.setLocation(280,30);
 		data2.setSize(200, 300);
 		basepane.add(data2);
-
+		
+		//Contains the communication log
 		JPanel data3 = new JPanel();
 		data3.setLayout(null);
 		data3.setLocation(600,30);
 		data3.setSize(200, 300);
 		basepane.add(data3);
 
+		//Contains the connect, home, and request data buttons
 		JPanel buttons1 = new JPanel();
 		buttons1.setLayout(null);
 		buttons1.setLocation(30,400);
 		buttons1.setSize(450, 200);
 		basepane.add(buttons1);
 
+		//Contains the stop, forward, backward, left, and right buttons
 		JPanel buttons2 = new JPanel();
 		buttons2.setLayout(null);
 		buttons2.setLocation(500,400);
@@ -70,6 +84,7 @@ public class GUI
 		touch1data.setText("0");
 		data2.add(touch1data);
 
+		//Display for touch sensor 2
 		JLabel touch2label = new JLabel("Touch 2");
 		touch2label.setSize(100,50);
 		touch2label.setLocation(0,60);
@@ -83,6 +98,7 @@ public class GUI
 		touch2data.setText("0");
 		data2.add(touch2data);
 
+		//Display for the light sensor data
 		JLabel lightlabel = new JLabel("Light");
 		lightlabel.setSize(100,50);
 		lightlabel.setLocation(0,120);
@@ -96,6 +112,7 @@ public class GUI
 		lightdata.setText("0");
 		data2.add(lightdata);
 
+		//Display for the sound sensor data
 		JLabel soundlabel = new JLabel("Sound");
 		soundlabel.setSize(100,50);
 		soundlabel.setLocation(0,180);
@@ -109,6 +126,7 @@ public class GUI
 		sounddata.setText("0");
 		data2.add(sounddata);
 
+		//Display for the ultrasonic sensor data
 		JLabel ultralabel = new JLabel("Ultrasonic");
 		ultralabel.setSize(100,50);
 		ultralabel.setLocation(0,240);
@@ -122,9 +140,15 @@ public class GUI
 		ultradata.setText("0");
 		data2.add(ultradata);
 
+<<<<<<< HEAD
 		//command log
 		commlog = new JTextArea();
 		commlog.setSize(300,300);
+=======
+		//command log display
+		final JTextField commlog = new JTextField();
+		commlog.setSize(200,300);
+>>>>>>> branch 'master' of https://github.com/apche93/CS3240.git
 		commlog.setLocation(0,0);
 		commlog.setEditable(false);
 		//commlog.setHorizontalAlignment(0);
@@ -141,7 +165,9 @@ public class GUI
 		connect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
-				//commlog.setText("Connecting...");
+				commlog.setText("Connecting...");
+				control.getController().connect();
+				basepane.requestFocusInWindow();
 			}
 		});
 		buttons1.add(connect);
@@ -159,6 +185,7 @@ public class GUI
 			{
 				control.getController().requestSystemStatusData();
 				commlog.setText("Requesting data...");
+				basepane.requestFocusInWindow();
 			}
 		});
 		buttons1.add(requestdata);
@@ -171,6 +198,7 @@ public class GUI
 			{
 				control.getController().stop();
 				commlog.setText("Stopped");
+				basepane.requestFocusInWindow();
 			}
 		});
 		buttons2.add(stop);
@@ -183,6 +211,7 @@ public class GUI
 			{
 				control.getController().moveForward();
 				commlog.setText("Moving forward...");
+				basepane.requestFocusInWindow();
 			}
 		});
 		buttons2.add(forward);
@@ -195,6 +224,7 @@ public class GUI
 			{
 				control.getController().moveBackward();
 				commlog.setText("Moving backward...");
+				basepane.requestFocusInWindow();
 			}
 		});
 		buttons2.add(backward);
@@ -207,6 +237,7 @@ public class GUI
 			{
 				control.getController().moveLeft();
 				commlog.setText("Turning left...");
+				basepane.requestFocusInWindow();
 			}
 		});
 		buttons2.add(left);
@@ -219,32 +250,62 @@ public class GUI
 			{
 				control.getController().moveRight();
 				commlog.setText("Turning right...");
+				basepane.requestFocusInWindow();
 			}
 		});
 		buttons2.add(right);
 
-		basepane.addKeyListener(new KeyListener() {
+		basepane.addKeyListener(new KeyListener() { //Listener allowing the user to use keyboard buttons 
+				//instead of on screen buttons
 			public void keyPressed(KeyEvent e) {
-				switch(e.getKeyChar()) {
-				case KeyEvent.VK_UP:
-					control.getController().moveForward();
-					commlog.setText("Moving forward...");
-					break;
-				case KeyEvent.VK_DOWN:
-					control.getController().moveBackward();
-					commlog.setText("Moving backward...");
-					break;
-				case KeyEvent.VK_LEFT:
-					control.getController().moveLeft();
-					commlog.setText("Turning left...");
-					break;
-				case KeyEvent.VK_RIGHT:
-					control.getController().moveRight();
-					commlog.setText("Turning right...");
-					break;
+				int keyCode = e.getKeyCode();
+				if(keyCode == KeyEvent.VK_W || keyCode == KeyEvent.VK_UP) {
+					if(!keysCurrentlyPressed.contains("up")) {
+						control.getController().moveForward();
+						commlog.setText("Moving forward...");
+						keysCurrentlyPressed.add("up");
+					}
+				}
+				else if(keyCode == KeyEvent.VK_S || keyCode == KeyEvent.VK_DOWN) {
+					if(!keysCurrentlyPressed.contains("down")) {
+						control.getController().moveBackward();
+						commlog.setText("Moving backward...");
+						keysCurrentlyPressed.add("down");
+					}
+				}
+				else if(keyCode == KeyEvent.VK_A || keyCode == KeyEvent.VK_LEFT) {
+					if(!keysCurrentlyPressed.contains("left")) {
+						control.getController().moveLeft();
+						commlog.setText("Turning left...");
+						keysCurrentlyPressed.add("left");
+					}
+				}
+				else if(keyCode == KeyEvent.VK_D || keyCode == KeyEvent.VK_RIGHT) {
+					if(!keysCurrentlyPressed.contains("right")) {
+						control.getController().moveRight();
+						commlog.setText("Turning right...");
+						keysCurrentlyPressed.add("right");
+					}
 				}
 			}
 			public void keyReleased(KeyEvent e) {
+				String command = "";
+				int keyCode = e.getKeyCode();
+				if(keyCode == KeyEvent.VK_W || keyCode == KeyEvent.VK_UP) {
+					command = "up";
+				}
+				else if(keyCode == KeyEvent.VK_S || keyCode == KeyEvent.VK_DOWN) {
+					command = "down";
+				}
+				else if(keyCode == KeyEvent.VK_A || keyCode == KeyEvent.VK_LEFT) {
+					command = "left";
+				}
+				else if(keyCode == KeyEvent.VK_D || keyCode == KeyEvent.VK_RIGHT) {
+					command = "right";
+				}
+				
+				keysCurrentlyPressed.remove(command);
+				//System.out.println(keysCurrentlyPressed);
 				control.getController().stop();
 				commlog.setText("Stopped");
 			}
@@ -252,8 +313,10 @@ public class GUI
 
 			}
 		});
+		basepane.setFocusable(true);
+		basepane.requestFocusInWindow();
 
-		Timer timer = new Timer(50, new ActionListener() {
+		Timer timer = new Timer(50, new ActionListener() { //Timer which updates the sensor displays on screen
 			public void actionPerformed(ActionEvent e) {
 				sounddata.setText("" + control.getExtSensor().getSound().getValue());
 				touch1data.setText("" + control.getExtSensor().getTouch().getValue());
@@ -262,6 +325,15 @@ public class GUI
 			}
 		});
 		timer.start();
+		
+		Timer systemStatusTimer = new Timer(1000, new ActionListener() { //Timer which requests sensor updates
+				//once per second
+			public void actionPerformed(ActionEvent e) {
+				control.getController().requestSystemStatusData();
+				commlog.setText("Requesting data...");
+			}
+		});
+		systemStatusTimer.start();
 
 		basepane.setOpaque(true);
 		return basepane;

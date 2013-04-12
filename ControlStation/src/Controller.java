@@ -28,12 +28,12 @@ public class Controller {
 		connect();
 		this.mainControl = mainControl;
 	}
+	
+	//initiates the connection to the robot
 	public void connect() {
 		try {
-			//connection = NXTCommFactory.createNXTComm(NXTCommFactory.USB);
-			//info = connection.search(null, 0);
 			connection = NXTCommFactory.createNXTComm(NXTCommFactory.BLUETOOTH);
-			info = connection.search("NXT", 1111);
+			info = connection.search("LEAD4", 1111);
 		}
 		catch (NXTCommException e) {
 			System.out.println(e.toString());
@@ -55,6 +55,8 @@ public class Controller {
 	public void goHome() {
 		//to be implemented later
 	}
+	
+	//sends a packet requesting the system status packet from the robot
 	public void requestSystemStatusData() {
 		if(connected) {
 			String opcode = "S";
@@ -82,6 +84,8 @@ public class Controller {
 	public int getSpeed() {
 		return robotSpeed;
 	}
+	
+	//sends a packet telling the robot to stop
 	public void stop() {
 		if(connected) {
 			String opcode = "F";
@@ -92,6 +96,8 @@ public class Controller {
 			sendMessage(message);
 		}
 	}
+	
+	//sends a packet telling the robot to move forwards
 	public void moveForward() {
 		if(connected) {
 			String opcode = "C";
@@ -99,9 +105,21 @@ public class Controller {
 			String message = messageSourceID + intTo4CharacterString(messageNumber) + opcode + breakpoint + intTo4CharacterString(robotSpeed);
 			String checksum = calculateChecksum(message);
 			message = headerString + checksum + message + endString;
+<<<<<<< HEAD
 			sendMessage(message);
+=======
+			try {
+				connectionOutputStream.write(message.getBytes());
+				connectionOutputStream.flush();
+				messageNumber++;
+			} catch (IOException e) {
+				System.out.println(e.toString());
+			}
+>>>>>>> branch 'master' of https://github.com/apche93/CS3240.git
 		}
 	}
+	
+	//sends a packet telling the robot to move backwards
 	public void moveBackward() {
 		if(connected) {
 			String opcode = "D";
@@ -112,6 +130,8 @@ public class Controller {
 			sendMessage(message);
 		}
 	}
+	
+	//sends a packet telling the robot to turn left
 	public void moveLeft() {
 		if(connected) {
 			String opcode = "A";
@@ -122,6 +142,8 @@ public class Controller {
 			sendMessage(message);
 		}
 	}
+	
+	//sends a packet telling the robot to turn right
 	public void moveRight() {
 		if(connected) {
 			String opcode = "B";
@@ -132,6 +154,8 @@ public class Controller {
 			sendMessage(message);
 		}
 	}
+	
+	//sends an execution response acknowledgment packet
 	public void executionResponseAcknowledgment(String messageIDParameter) {
 		if(connected) {
 			String opcode = "O";
@@ -141,6 +165,8 @@ public class Controller {
 			sendMessage(message);
 		}
 	}
+	
+	//sends a system status acknowledgment packet
 	public void systemStatusAcknowledgment(String messageIDParameter) {
 		if(connected) {
 			String opcode = "P";
@@ -150,6 +176,8 @@ public class Controller {
 			sendMessage(message);
 		}
 	}
+	
+	//sends an event error acknowledgment packet
 	public void eventErrorAcknowledgment(String messageIDParameter) {
 		if(connected) {
 			String opcode = "Q";
@@ -191,5 +219,8 @@ public class Controller {
 		String numberAsString = "" + numberToConvert%maxNumberValue;
 		numberAsString = zeroString.substring(0, 4 - numberAsString.length()) + numberAsString;
 		return numberAsString;
+	}
+	public NXTComm getConnection() {
+		return connection;
 	}
 }
