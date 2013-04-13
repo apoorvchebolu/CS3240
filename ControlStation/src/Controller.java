@@ -23,7 +23,7 @@ public class Controller {
 	public Controller(MainControl mainControl) {
 		messageNumber = 0;
 		connected = false;
-		robotSpeed = 0;
+		robotSpeed = 6;
 		currentRobotAngle = 0;
 		connect();
 		this.mainControl = mainControl;
@@ -98,30 +98,41 @@ public class Controller {
 	}
 	
 	//sends a packet telling the robot to move forwards
-	public void moveForward() {
+	public void moveForward(boolean curveLeft, boolean curveRight) {
+		int leftMotorSpeed = robotSpeed;
+		int rightMotorSpeed = robotSpeed;
+		if(curveLeft) {
+			leftMotorSpeed = robotSpeed / 2;
+		}
+		if(curveRight) {
+			rightMotorSpeed = robotSpeed / 2;
+		}
 		if(connected) {
 			String opcode = "C";
 			String breakpoint = zeroString;
-			String message = messageSourceID + intTo4CharacterString(messageNumber) + opcode + breakpoint + intTo4CharacterString(robotSpeed);
+			String message = messageSourceID + intTo4CharacterString(messageNumber) + opcode
+					+ breakpoint + intTo4CharacterString(leftMotorSpeed) + intTo4CharacterString(rightMotorSpeed);
 			String checksum = calculateChecksum(message);
 			message = headerString + checksum + message + endString;
 			sendMessage(message);
-			try {
-				connectionOutputStream.write(message.getBytes());
-				connectionOutputStream.flush();
-				messageNumber++;
-			} catch (IOException e) {
-				System.out.println(e.toString());
-			}
 		}
-	}
+	}	
 	
 	//sends a packet telling the robot to move backwards
-	public void moveBackward() {
+	public void moveBackward(boolean curveLeft, boolean curveRight) {
+		int leftMotorSpeed = robotSpeed;
+		int rightMotorSpeed = robotSpeed;
+		if(curveLeft) {
+			leftMotorSpeed = robotSpeed / 2;
+		}
+		if(curveRight) {
+			rightMotorSpeed = robotSpeed / 2;
+		}
 		if(connected) {
 			String opcode = "D";
 			String breakpoint = zeroString;
-			String message = messageSourceID + intTo4CharacterString(messageNumber) + opcode + breakpoint + intTo4CharacterString(robotSpeed);
+			String message = messageSourceID + intTo4CharacterString(messageNumber) + opcode
+					+ breakpoint + intTo4CharacterString(leftMotorSpeed) + intTo4CharacterString(rightMotorSpeed);
 			String checksum = calculateChecksum(message);
 			message = headerString + checksum + message + endString;
 			sendMessage(message);
