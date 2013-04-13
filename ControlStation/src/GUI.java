@@ -277,7 +277,7 @@ public class GUI
 						if(curveForwardLeft && !curveBackwardLeft){
 							control.getController().moveForward(true, false);
 						}
-						else if(!curveForwardLeft && !curveBackwardLeft){
+						else if(!curveForwardLeft && curveBackwardLeft){
 							control.getController().moveBackward(true, false);
 						}
 						else {

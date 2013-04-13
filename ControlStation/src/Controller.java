@@ -33,7 +33,7 @@ public class Controller {
 	public void connect() {
 		try {
 			connection = NXTCommFactory.createNXTComm(NXTCommFactory.BLUETOOTH);
-			info = connection.search("LEAD4", 1111);
+			info = connection.search("NXT", 1111);
 		}
 		catch (NXTCommException e) {
 			System.out.println(e.toString());
