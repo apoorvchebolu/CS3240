@@ -6,18 +6,25 @@ import javax.swing.*;
 
 public class GUI
 {
-	static int padDisplaceX = 200;
-	static int padDisplaceY = 10;
+	static int padDisplaceX = 370;
+	static int padDisplaceY = 20;
 	static String newline = "\n";
-	
+
 	private ArrayList<String> keysCurrentlyPressed;
 
-	JPanel data1, data2, data3, buttons1, buttons2;
-	JLabel touch1label, touch2label, lightlabel, soundlabel, ultralabel;
-	JTextField touch1data, touch2data, lightdata, sounddata, ultradata;
-	JButton connect, home, requestdata, stop, forward, backward, left, right;
-	JTextArea commlog;
+	JPanel data1, data2, buttons1, buttons2;
+	JTabbedPane data3;
+	JLabel batterylabel, signallabel, xposlabel, yposlabel, touch1label, touch2label, lightlabel, soundlabel, ultralabel, speedlabel;
+	JTextField batterydata, signaldata, xposdata, yposdata, touch1data, touch2data, lightdata, sounddata, ultradata, speed;
+	JButton connect, home, requestdata, debug, speedup, speeddown, stop, forward, backward, left, right;
+
+	JTextArea commlog, commlogB, commlogR;
+
 	MainControl control;
+
+	int varspeed = 5;
+	static int varspeedMIN = 0;
+	static int varspeedMAX = 20;
 
 	public GUI(MainControl m)
 	{
@@ -26,8 +33,8 @@ public class GUI
 	}
 
 	public JPanel createContentPane (){  //Initialize the objects in the GUI, including buttons, labels, and 
-											//action listeners
-		
+		//action listeners
+
 		//panels
 		final JPanel basepane = new JPanel();
 		basepane.setLayout(null);
@@ -37,38 +44,96 @@ public class GUI
 		data1.setLayout(null);
 		data1.setLocation(30,30);
 		data1.setSize(200, 300);
+		data1.setFocusable(false);
 		basepane.add(data1);
 
 		//Used to contain display objects for external sensor data values (touch, sound, light, ultrasonic)
-		JPanel data2 = new JPanel();
+		data2 = new JPanel();
 		data2.setLayout(null);
 		data2.setLocation(280,30);
 		data2.setSize(200, 300);
+		data2.setFocusable(false);
 		basepane.add(data2);
-		
+
 		//Contains the communication log
-		JPanel data3 = new JPanel();
-		data3.setLayout(null);
+		data3 = new JTabbedPane();
+		//data3.setLayout(null);
 		data3.setLocation(600,30);
 		data3.setSize(300, 300);
+		data3.setFocusable(false);
 		basepane.add(data3);
 
 		//Contains the connect, home, and request data buttons
-		JPanel buttons1 = new JPanel();
+		buttons1 = new JPanel();
 		buttons1.setLayout(null);
 		buttons1.setLocation(30,400);
-		buttons1.setSize(450, 200);
+		buttons1.setSize(320, 200);
+		buttons1.setFocusable(false);
 		basepane.add(buttons1);
 
 		//Contains the stop, forward, backward, left, and right buttons
-		JPanel buttons2 = new JPanel();
+		buttons2 = new JPanel();
 		buttons2.setLayout(null);
-		buttons2.setLocation(500,400);
-		buttons2.setSize(450, 200);
+		buttons2.setLocation(350,400);
+		buttons2.setSize(620, 200);
+		buttons2.setFocusable(false);
 		basepane.add(buttons2);
 
+		//system status display
+		batterylabel = new JLabel("Battery");
+		batterylabel.setSize(100,50);
+		batterylabel.setLocation(0,0);
+		batterylabel.setHorizontalAlignment(0);
+		data1.add(batterylabel);
+		batterydata = new JTextField();
+		batterydata.setSize(100,50);
+		batterydata.setLocation(100,0);
+		batterydata.setEditable(false);
+		batterydata.setHorizontalAlignment(JTextField.RIGHT);
+		batterydata.setText("0");
+		data1.add(batterydata);
+
+		signallabel = new JLabel("Signal Strength");
+		signallabel.setSize(100,50);
+		signallabel.setLocation(0,60);
+		signallabel.setHorizontalAlignment(0);
+		data1.add(signallabel);
+		signaldata = new JTextField();
+		signaldata.setSize(100,50);
+		signaldata.setLocation(100,60);
+		signaldata.setEditable(false);
+		signaldata.setHorizontalAlignment(JTextField.RIGHT);
+		signaldata.setText("0");
+		data1.add(signaldata);
+
+		xposlabel = new JLabel("X-pos");
+		xposlabel.setSize(100,50);
+		xposlabel.setLocation(0,180);
+		xposlabel.setHorizontalAlignment(0);
+		data1.add(xposlabel);
+		xposdata = new JTextField();
+		xposdata.setSize(100,50);
+		xposdata.setLocation(100,180);
+		xposdata.setEditable(false);
+		xposdata.setHorizontalAlignment(JTextField.RIGHT);
+		xposdata.setText("0");
+		data1.add(xposdata);
+
+		yposlabel = new JLabel("Y-pos");
+		yposlabel.setSize(100,50);
+		yposlabel.setLocation(0,240);
+		yposlabel.setHorizontalAlignment(0);
+		data1.add(yposlabel);
+		yposdata = new JTextField();
+		yposdata.setSize(100,50);
+		yposdata.setLocation(100,240);
+		yposdata.setEditable(false);
+		yposdata.setHorizontalAlignment(JTextField.RIGHT);
+		yposdata.setText("0");
+		data1.add(yposdata);
+
 		//sensor data display
-		JLabel touch1label = new JLabel("Touch 1");
+		touch1label = new JLabel("Touch 1");
 		touch1label.setSize(100,50);
 		touch1label.setLocation(0,0);
 		touch1label.setHorizontalAlignment(0);
@@ -82,7 +147,7 @@ public class GUI
 		data2.add(touch1data);
 
 		//Display for touch sensor 2
-		JLabel touch2label = new JLabel("Touch 2");
+		touch2label = new JLabel("Touch 2");
 		touch2label.setSize(100,50);
 		touch2label.setLocation(0,60);
 		touch2label.setHorizontalAlignment(0);
@@ -96,7 +161,7 @@ public class GUI
 		data2.add(touch2data);
 
 		//Display for the light sensor data
-		JLabel lightlabel = new JLabel("Light");
+		lightlabel = new JLabel("Light");
 		lightlabel.setSize(100,50);
 		lightlabel.setLocation(0,120);
 		lightlabel.setHorizontalAlignment(0);
@@ -110,7 +175,7 @@ public class GUI
 		data2.add(lightdata);
 
 		//Display for the sound sensor data
-		JLabel soundlabel = new JLabel("Sound");
+		soundlabel = new JLabel("Sound");
 		soundlabel.setSize(100,50);
 		soundlabel.setLocation(0,180);
 		soundlabel.setHorizontalAlignment(0);
@@ -124,7 +189,7 @@ public class GUI
 		data2.add(sounddata);
 
 		//Display for the ultrasonic sensor data
-		JLabel ultralabel = new JLabel("Ultrasonic");
+		ultralabel = new JLabel("Ultrasonic");
 		ultralabel.setSize(100,50);
 		ultralabel.setLocation(0,240);
 		ultralabel.setHorizontalAlignment(0);
@@ -143,17 +208,50 @@ public class GUI
 		//command log display
 		commlog.setLocation(0,0);
 		commlog.setEditable(false);
+		commlog.setFocusable(false);
 		//commlog.setHorizontalAlignment(0);
 		commlog.setText(" --Control Station online-- " + newline);
 		JScrollPane commlogpane = new JScrollPane(commlog);
 		commlogpane.setSize(300,300);
+		commlogpane.setFocusable(false);
 		commlogpane.setVerticalScrollBarPolicy ( ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS );
-		data3.add(commlogpane);
+		data3.addTab("All", commlogpane);
+
+		//command log
+		commlogB = new JTextArea();
+		commlogB.setSize(300,300);
+		//command log display
+		commlogB.setLocation(0,0);
+		commlogB.setEditable(false);
+		commlogB.setFocusable(false);
+		//commlog.setHorizontalAlignment(0);
+		commlogB.setText(" --Control Station online-- " + newline);
+		JScrollPane commlogpaneB = new JScrollPane(commlogB);
+		commlogpaneB.setSize(300,300);
+		commlogpaneB.setFocusable(false);
+		commlogpaneB.setVerticalScrollBarPolicy ( ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS );
+		data3.addTab("Base", commlogpaneB);
+
+		//command log
+		commlogR = new JTextArea();
+		commlogR.setSize(300,300);
+		//command log display
+		commlogR.setLocation(0,0);
+		commlogR.setEditable(false);
+		commlogR.setFocusable(false);
+		//commlog.setHorizontalAlignment(0);
+		commlogR.setText(" --Control Station online-- " + newline);
+		JScrollPane commlogpaneR = new JScrollPane(commlogR);
+		commlogpaneR.setSize(300,300);
+		commlogpaneR.setFocusable(false);
+		commlogpaneR.setVerticalScrollBarPolicy ( ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS );
+		data3.addTab("Robot", commlogpaneR);
 
 		//buttons
-		JButton connect = new JButton("Connect");
-		connect.setSize(120,60);
+		connect = new JButton("Connect");
+		connect.setSize(120,110);
 		connect.setLocation(0,0);
+		connect.setFocusable(false);
 		connect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
@@ -164,14 +262,16 @@ public class GUI
 		});
 		buttons1.add(connect);
 
-		JButton home = new JButton("Home");
-		home.setSize(120,60);
+		home = new JButton("Home");
+		home.setSize(160,30);
 		home.setLocation(150,0);
+		home.setFocusable(false);
 		buttons1.add(home);
 
-		JButton requestdata = new JButton("Request System Data");
-		requestdata.setSize(180,40);
-		requestdata.setLocation(40,80);
+		requestdata = new JButton("Request System Data");
+		requestdata.setSize(160,30);
+		requestdata.setLocation(150,40);
+		requestdata.setFocusable(false);
 		requestdata.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
@@ -182,9 +282,72 @@ public class GUI
 		});
 		buttons1.add(requestdata);
 
-		JButton stop = new JButton("Stop");
-		stop.setSize(70,50);
-		stop.setLocation(10,20);
+		debug = new JButton("Launch Debugger");
+		debug.setSize(160,30);
+		debug.setLocation(150,80);
+		debug.setFocusable(false);
+		debug.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				//control method goes here once debugger code is added
+				commlog.append("Launched debugger" + newline);
+			}
+		});
+		buttons1.add(debug);
+
+		speedlabel = new JLabel("Motor Speed");
+		speedlabel.setSize(100,50);
+		speedlabel.setLocation(110,0);
+		speedlabel.setHorizontalAlignment(0);
+		buttons2.add(speedlabel);
+
+		speed = new JTextField();
+		speed.setSize(60,25);
+		speed.setLocation(130,40);
+		speed.setEditable(false);
+		speed.setFocusable(false);
+		speed.setHorizontalAlignment(JTextField.CENTER);
+		speed.setText(varspeed+"");
+		buttons2.add(speed);
+
+		speedup = new JButton("+");
+		speedup.setSize(41,41);
+		speedup.setLocation(160,75);
+		speedup.setFocusable(false);
+		speedup.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				if(varspeed < varspeedMAX-1)
+					varspeed += 1;
+				else
+					varspeed = varspeedMAX;
+				speed.setText(varspeed+"");
+				control.getController().setSpeed(varspeed);
+			}
+		});
+		buttons2.add(speedup);
+
+		speeddown = new JButton("-");
+		speeddown.setSize(41,41);
+		speeddown.setLocation(120,75);
+		speeddown.setFocusable(false);
+		speeddown.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{				
+				if(varspeed > varspeedMIN+1)
+					varspeed -= 1;
+				else
+					varspeed = varspeedMIN;
+				speed.setText(varspeed+"");
+				control.getController().setSpeed(varspeed);
+			}
+		});
+		buttons2.add(speeddown);
+
+		stop = new JButton("Stop");
+		stop.setSize(60,50);
+		stop.setLocation(270,30);
+		stop.setFocusable(false);
 		stop.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
@@ -195,9 +358,10 @@ public class GUI
 		});
 		buttons2.add(stop);
 
-		JButton forward = new JButton(" ^ ");
+		forward = new JButton(" ^ ");
 		forward.setSize(50,50);
 		forward.setLocation(60+padDisplaceX, 0+padDisplaceY);
+		forward.setFocusable(false);
 		forward.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
@@ -208,9 +372,10 @@ public class GUI
 		});
 		buttons2.add(forward);
 
-		JButton backward = new JButton(" v ");
+		backward = new JButton(" v ");
 		backward.setSize(50,50);
 		backward.setLocation(60+padDisplaceX, 60+padDisplaceY);
+		backward.setFocusable(false);
 		backward.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
@@ -221,9 +386,10 @@ public class GUI
 		});
 		buttons2.add(backward);
 
-		JButton left = new JButton(" < ");
+		left = new JButton(" < ");
 		left.setSize(50,50);
 		left.setLocation(0+padDisplaceX, 60+padDisplaceY);
+		left.setFocusable(false);
 		left.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
@@ -234,9 +400,10 @@ public class GUI
 		});
 		buttons2.add(left);
 
-		JButton right = new JButton(" > ");
+		right = new JButton(" > ");
 		right.setSize(50,50);
 		right.setLocation(120+padDisplaceX, 60+padDisplaceY);
+		right.setFocusable(false);
 		right.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
@@ -248,61 +415,64 @@ public class GUI
 		buttons2.add(right);
 
 		basepane.addKeyListener(new KeyListener() { //Listener allowing the user to use keyboard buttons 
-				//instead of on screen buttons
+			//instead of on screen buttons
 			public void keyPressed(KeyEvent e) {
 				int keyCode = e.getKeyCode();
 				if(keyCode == KeyEvent.VK_W || keyCode == KeyEvent.VK_UP) {
 					if(!keysCurrentlyPressed.contains("up")) {
-						boolean curveLeft = keysCurrentlyPressed.contains("left");
-						boolean curveRight = keysCurrentlyPressed.contains("right");
-						control.getController().moveForward(curveLeft, curveRight);
+						control.getController().moveForward(false, false);
 						commlog.append("Moving forward..." + newline);
 						keysCurrentlyPressed.add("up");
 					}
 				}
 				else if(keyCode == KeyEvent.VK_S || keyCode == KeyEvent.VK_DOWN) {
 					if(!keysCurrentlyPressed.contains("down")) {
-						boolean curveLeft = keysCurrentlyPressed.contains("left");
-						boolean curveRight = keysCurrentlyPressed.contains("right");
-						control.getController().moveBackward(curveLeft, curveRight);
+						control.getController().moveBackward(false, false);
 						commlog.append("Moving backward..." + newline);
 						keysCurrentlyPressed.add("down");
 					}
 				}
 				else if(keyCode == KeyEvent.VK_A || keyCode == KeyEvent.VK_LEFT) {
 					if(!keysCurrentlyPressed.contains("left")) {
-						keysCurrentlyPressed.add("left");
-						boolean curveForwardLeft = keysCurrentlyPressed.contains("up");
-						boolean curveBackwardLeft = keysCurrentlyPressed.contains("down");
-						if(curveForwardLeft && !curveBackwardLeft){
-							control.getController().moveForward(true, false);
-						}
-						else if(!curveForwardLeft && curveBackwardLeft){
-							control.getController().moveBackward(true, false);
-						}
-						else {
-							control.getController().moveLeft();
-						}
+						keysCurrentlyPressed.add("left");						
+						control.getController().moveLeft();
 						commlog.append("Turning left..." + newline);
-						
+
 					}
 				}
 				else if(keyCode == KeyEvent.VK_D || keyCode == KeyEvent.VK_RIGHT) {
 					if(!keysCurrentlyPressed.contains("right")) {
 						keysCurrentlyPressed.add("right");
-						boolean curveForwardRight = keysCurrentlyPressed.contains("up");
-						boolean curveBackwardRight = keysCurrentlyPressed.contains("down");
-						if(curveForwardRight && !curveBackwardRight){
-							control.getController().moveForward(false, true);
-						}
-						else if(!curveForwardRight && curveBackwardRight){
-							control.getController().moveBackward(false, true);
-						}
-						else {
-							control.getController().moveRight();
-						}
+						control.getController().moveRight();
 						commlog.append("Turning right..." + newline);
-						
+					}
+				}
+				else if(keyCode == KeyEvent.VK_Q) {
+					if(!keysCurrentlyPressed.contains("curveForwardLeft")) {
+						keysCurrentlyPressed.add("curveForwardLeft");
+						control.getController().moveForward(true, false);
+						commlog.append("Curving forward and left..." + newline);
+					}
+				}
+				else if(keyCode == KeyEvent.VK_E) {
+					if(!keysCurrentlyPressed.contains("curveForwardRight")) {
+						keysCurrentlyPressed.add("curveForwardRight");
+						control.getController().moveForward(false, true);
+						commlog.append("Curving forward and right..." + newline);
+					}
+				}
+				else if(keyCode == KeyEvent.VK_Z) {
+					if(!keysCurrentlyPressed.contains("curveBackwardLeft")) {
+						keysCurrentlyPressed.add("curveBackwardLeft");
+						control.getController().moveBackward(true, false);
+						commlog.append("Curving backward and left..." + newline);
+					}
+				}
+				else if(keyCode == KeyEvent.VK_C) {
+					if(!keysCurrentlyPressed.contains("curveBackwardRight")) {
+						keysCurrentlyPressed.add("curveBackwardRight");
+						control.getController().moveBackward(false, true);
+						commlog.append("Curving backward and right..." + newline);
 					}
 				}
 			}
@@ -321,7 +491,18 @@ public class GUI
 				else if(keyCode == KeyEvent.VK_D || keyCode == KeyEvent.VK_RIGHT) {
 					command = "right";
 				}
-				
+				else if(keyCode == KeyEvent.VK_Q) {
+					command = "curveForwardLeft";
+				}
+				else if(keyCode == KeyEvent.VK_E) {
+					command = "curveForwardRight";
+				}
+				else if(keyCode == KeyEvent.VK_Z) {
+					command = "curveBackwardLeft";
+				}
+				else if(keyCode == KeyEvent.VK_C) {
+					command = "curveBackwardRight";
+				}
 				keysCurrentlyPressed.remove(command);
 				//System.out.println(keysCurrentlyPressed);
 				control.getController().stop();
@@ -343,9 +524,9 @@ public class GUI
 			}
 		});
 		timer.start();
-		
+
 		Timer systemStatusTimer = new Timer(1000, new ActionListener() { //Timer which requests sensor updates
-				//once per second
+			//once per second
 			public void actionPerformed(ActionEvent e) {
 				control.getController().requestSystemStatusData();
 				commlog.append("Requesting data..." + newline);
@@ -356,4 +537,24 @@ public class GUI
 		basepane.setOpaque(true);
 		return basepane;
 	}
+	/*
+	public static void init()
+	{
+		JFrame frame = new JFrame("Control Station");
+		GUI controlPanel = new GUI();
+		frame.setContentPane(controlPanel.createContentPane());
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setLocation(20,20);
+		frame.setSize(1000,600);
+		frame.setVisible(true);
+	}
+
+	public static void main(String[] args) {
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				init();
+			}
+		});
+	}
+	 */
 }

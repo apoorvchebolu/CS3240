@@ -19,6 +19,9 @@ public class Controller {
 	private int currentRobotAngle;	
 	final private int maxNumberValue = 10000;
 	final private String zeroString = "0000";
+	final private int curveRatio = 2;
+	final private int checksumLength = 4;
+	final private int numberLength = 4;
 	
 	public Controller(MainControl mainControl) {
 		messageNumber = 0;
@@ -102,10 +105,10 @@ public class Controller {
 		int leftMotorSpeed = robotSpeed;
 		int rightMotorSpeed = robotSpeed;
 		if(curveLeft) {
-			leftMotorSpeed = robotSpeed / 2;
+			leftMotorSpeed = robotSpeed / curveRatio;
 		}
 		if(curveRight) {
-			rightMotorSpeed = robotSpeed / 2;
+			rightMotorSpeed = robotSpeed / curveRatio;
 		}
 		if(connected) {
 			String opcode = "C";
@@ -123,10 +126,10 @@ public class Controller {
 		int leftMotorSpeed = robotSpeed;
 		int rightMotorSpeed = robotSpeed;
 		if(curveLeft) {
-			leftMotorSpeed = robotSpeed / 2;
+			leftMotorSpeed = robotSpeed / curveRatio;
 		}
 		if(curveRight) {
-			rightMotorSpeed = robotSpeed / 2;
+			rightMotorSpeed = robotSpeed / curveRatio;
 		}
 		if(connected) {
 			String opcode = "D";
@@ -194,6 +197,15 @@ public class Controller {
 			message = headerString + checksum + message + endString;
 			sendMessage(message);
 		}
+	}	
+	public void eventError(String errorCode, String messageIDParameter) {
+		if(connected) {
+			String opcode = "M";
+			String message = messageSourceID + intTo4CharacterString(messageNumber) + opcode + errorCode + messageIDParameter;
+			String checksum = calculateChecksum(message);
+			message = headerString + checksum + message + endString;
+			sendMessage(message);
+		}
 	}
 
 	private void sendMessage(String message) {
@@ -215,13 +227,13 @@ public class Controller {
 		return formatChecksum(checksum);
 	}
 	private String formatChecksum(int checksum) {
-		String checksumString = "" + checksum % 100;
-		checksumString = zeroString.substring(0, 2 - checksumString.length()) + checksumString;
+		String checksumString = "" + checksum % (Math.pow(10, checksumLength));
+		checksumString = zeroString.substring(0, checksumLength - checksumString.length()) + checksumString;
 		return checksumString;
 	}
 	private String intTo4CharacterString(int numberToConvert) {
 		String numberAsString = "" + numberToConvert%maxNumberValue;
-		numberAsString = zeroString.substring(0, 4 - numberAsString.length()) + numberAsString;
+		numberAsString = zeroString.substring(0, numberLength - numberAsString.length()) + numberAsString;
 		return numberAsString;
 	}
 	public NXTComm getConnection() {

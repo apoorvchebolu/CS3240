@@ -4,7 +4,8 @@ import javax.swing.SwingUtilities;
 
 public class Driver {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) { //Responsible for creating the MainControl object as well as creating and
+		//starting the threads for the BluetoothListener and the GUI
 		
 		final MainControl mainControl = new MainControl();
 		BluetoothListener mainListener = new BluetoothListener(mainControl);

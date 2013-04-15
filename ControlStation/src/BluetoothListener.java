@@ -32,6 +32,7 @@ public class BluetoothListener extends Thread {
 	private final int positionXLength = 4;
 	private final int positionYIndex = 35;
 	private final int positionYLength = 4;
+	private final String malformedMessageError = "h";
 	public BluetoothListener(MainControl m) {
 		mainControl = m;
 		stopRequest = false;
@@ -62,7 +63,6 @@ public class BluetoothListener extends Thread {
 			String messageNumber = message.substring(messageNumberIndex, messageNumberLength);
 			String messageContent = message.substring(messageSourceIDIndex, message.length());
 			String calculatedChecksum = mainControl.getController().calculateChecksum(messageContent);
-			//System.out.println(calculatedChecksum + "  " + receivedChecksum);
 			mainControl.getMessageHolder().addMessage(new Message("Received", message));
 			if(calculatedChecksum.equals(receivedChecksum) && messageSourceID == 'R') {
 				
@@ -81,7 +81,7 @@ public class BluetoothListener extends Thread {
 					//not implemented yet
 					break;
 				default: //unexpected opcode response
-					//not implemented yet
+					mainControl.getController().eventError(malformedMessageError, "" + messageSourceID + messageNumber);
 					break;
 				}
 			}
@@ -92,7 +92,6 @@ public class BluetoothListener extends Thread {
 		int lightValue = Integer.parseInt(message.substring(lightIndex, lightIndex + lightLength));
 		int soundValue = Integer.parseInt(message.substring(soundIndex, soundIndex + soundLength));
 		int touchAValue = Integer.parseInt(message.substring(touchAIndex, touchAIndex + touchALength));
-		//	int touchBValue = (int)(message.charAt(22));
 		int batteryValue = Integer.parseInt(message.substring(batteryIndex, batteryIndex + batteryLength));
 		int signalStrength = Integer.parseInt(message.substring(signalIndex, signalIndex + signalLength));
 		int positionX = Integer.parseInt(message.substring(positionXIndex, positionXIndex + positionXLength));
@@ -105,6 +104,5 @@ public class BluetoothListener extends Thread {
 		mainControl.getIntSensor().getSignalStrength().setValue(signalStrength);
 		mainControl.getIntSensor().getPositionX().setValue(positionX);
 		mainControl.getIntSensor().getPositionY().setValue(positionY);
-		//System.out.println("system status processed");
 	}
 }
