@@ -20,14 +20,14 @@ public class Controller {
 	private int currentRobotAngle;	
 	final private int maxNumberValue = 10000;
 	final private String zeroString = "0000";
-	final private int curveRatio = 2;
-	final private int checksumLength = 4;
+	final private int curveRatio = 4;
+	final private int checksumLength = 2;
 	final private int numberLength = 4;
 	
 	public Controller(MainControl mainControl) {
 		messageNumber = 0;
 		connected = false;
-		robotSpeed = 6;
+		robotSpeed = 5;
 		currentRobotAngle = 0;
 		connect();
 		this.mainControl = mainControl;
@@ -37,7 +37,7 @@ public class Controller {
 	public void connect() {
 		try {
 			connection = NXTCommFactory.createNXTComm(NXTCommFactory.BLUETOOTH);
-			info = connection.search("NXT", 1111);
+			info = connection.search("LEAD4", 1111);
 		}
 		catch (NXTCommException e) {
 			System.out.println(e.toString());
@@ -238,7 +238,7 @@ public class Controller {
 		return formatChecksum(checksum);
 	}
 	private String formatChecksum(int checksum) {
-		String checksumString = "" + checksum % (Math.pow(10, checksumLength));
+		String checksumString = "" + checksum % ((int)(Math.pow(10, checksumLength)));
 		checksumString = zeroString.substring(0, checksumLength - checksumString.length()) + checksumString;
 		return checksumString;
 	}

@@ -442,7 +442,7 @@ public class GUI
 					if(!keysCurrentlyPressed.contains("left")) {
 						keysCurrentlyPressed.add("left");						
 						control.getController().moveLeft();
-						commlog.append("Turning left..." + newline);
+						//commlog.append("Turning left..." + newline);
 
 					}
 				}
@@ -531,7 +531,7 @@ public class GUI
 		});
 		timer.start();
 
-		Timer systemStatusTimer = new Timer(1000, new ActionListener() { //Timer which requests sensor updates
+		Timer systemStatusTimer = new Timer(10000, new ActionListener() { //Timer which requests sensor updates
 			//once per second
 			public void actionPerformed(ActionEvent e) {
 				control.getController().requestSystemStatusData();
@@ -560,12 +560,12 @@ public class GUI
 		
 	}
 	public void updateCommLog(Message message) {
-		commlog.append(message + newline);
+		commlog.append(message.getMessageContent() + newline);
 		if(message.getTypeOfMessage().equals("Received")) {
-			commlogReceived.append(message.getMessageContent());
+			commlogReceived.append(message.getMessageContent() + newline);
 		}
 		if(message.getTypeOfMessage().equals("Sent")) {
-			commlogSent.append(message.getMessageContent());
+			commlogSent.append(message.getMessageContent() + newline);
 		}
 	}
 	/*
