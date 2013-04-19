@@ -57,7 +57,13 @@ public class Controller {
 		}
 	}
 	public void goHome() {
-		//to be implemented later
+		if(connected) {
+			String opcode = "T";
+			String message = messageSourceID + intTo4CharacterString(messageNumber) + opcode;
+			String checksum = calculateChecksum(message);
+			message = headerString + checksum + message + endString;
+			sendMessage(message);
+		}
 	}
 	
 	//sends a packet requesting the system status packet from the robot

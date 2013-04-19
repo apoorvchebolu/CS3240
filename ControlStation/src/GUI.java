@@ -266,6 +266,12 @@ public class GUI
 		home.setSize(160,30);
 		home.setLocation(150,0);
 		home.setFocusable(false);
+		home.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				control.getController().goHome();
+				basepane.requestFocusInWindow();
+			}
+		});
 		buttons1.add(home);
 
 		requestdata = new JButton("Request System Data");
