@@ -90,7 +90,8 @@ public class BluetoothListener extends Thread {
 			}
 		}
 	}
-	private void processSystemStatusData(String message) {
+	private void processSystemStatusData(String message) { //Helper method to get the robot sensor data
+		//from the system status packet and move the data into the correct objects
 		int ultrasonicValue = Integer.parseInt(message.substring(ultrasonicIndex, ultrasonicIndex + ultrasonicLength));
 		int lightValue = Integer.parseInt(message.substring(lightIndex, lightIndex + lightLength));
 		int soundValue = Integer.parseInt(message.substring(soundIndex, soundIndex + soundLength));
