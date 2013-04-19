@@ -18,7 +18,7 @@ public class GUI
 	JTextField batterydata, signaldata, xposdata, yposdata, touch1data, touch2data, lightdata, sounddata, ultradata, speed;
 	JButton connect, home, requestdata, debug, speedup, speeddown, stop, forward, backward, left, right;
 
-	JTextArea commlog, commlogB, commlogR;
+	JTextArea commlog, commlogSent, commlogReceived;
 
 	MainControl control;
 
@@ -218,34 +218,34 @@ public class GUI
 		data3.addTab("All", commlogpane);
 
 		//command log
-		commlogB = new JTextArea();
-		commlogB.setSize(300,300);
+		commlogSent = new JTextArea();
+		commlogSent.setSize(300,300);
 		//command log display
-		commlogB.setLocation(0,0);
-		commlogB.setEditable(false);
-		commlogB.setFocusable(false);
+		commlogSent.setLocation(0,0);
+		commlogSent.setEditable(false);
+		commlogSent.setFocusable(false);
 		//commlog.setHorizontalAlignment(0);
-		commlogB.setText(" --Control Station online-- " + newline);
-		JScrollPane commlogpaneB = new JScrollPane(commlogB);
-		commlogpaneB.setSize(300,300);
-		commlogpaneB.setFocusable(false);
-		commlogpaneB.setVerticalScrollBarPolicy ( ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS );
-		data3.addTab("Base", commlogpaneB);
+		commlogSent.setText(" --Control Station online-- " + newline);
+		JScrollPane commlogpaneSent = new JScrollPane(commlogSent);
+		commlogpaneSent.setSize(300,300);
+		commlogpaneSent.setFocusable(false);
+		commlogpaneSent.setVerticalScrollBarPolicy ( ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS );
+		data3.addTab("Sent", commlogpaneSent);
 
 		//command log
-		commlogR = new JTextArea();
-		commlogR.setSize(300,300);
+		commlogReceived = new JTextArea();
+		commlogReceived.setSize(300,300);
 		//command log display
-		commlogR.setLocation(0,0);
-		commlogR.setEditable(false);
-		commlogR.setFocusable(false);
+		commlogReceived.setLocation(0,0);
+		commlogReceived.setEditable(false);
+		commlogReceived.setFocusable(false);
 		//commlog.setHorizontalAlignment(0);
-		commlogR.setText(" --Control Station online-- " + newline);
-		JScrollPane commlogpaneR = new JScrollPane(commlogR);
-		commlogpaneR.setSize(300,300);
-		commlogpaneR.setFocusable(false);
-		commlogpaneR.setVerticalScrollBarPolicy ( ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS );
-		data3.addTab("Robot", commlogpaneR);
+		commlogReceived.setText(" --Control Station online-- " + newline);
+		JScrollPane commlogpaneReceived = new JScrollPane(commlogReceived);
+		commlogpaneReceived.setSize(300,300);
+		commlogpaneReceived.setFocusable(false);
+		commlogpaneReceived.setVerticalScrollBarPolicy ( ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS );
+		data3.addTab("Received", commlogpaneReceived);
 
 		//buttons
 		connect = new JButton("Connect");
@@ -545,8 +545,27 @@ public class GUI
 	}
 	public void updateCommLog(ArrayList<Message> messageList) {
 		commlog.setText("");
+		commlogSent.setText("");
+		commlogReceived.setText("");
 		for(int i = 0; i < messageList.size(); i++) {
-			commlog.append(messageList.get(i).getMessageContent() + newline);
+			Message message = messageList.get(i);
+			commlog.append(message.getMessageContent() + newline);
+			if(message.getTypeOfMessage().equals("Received")) {
+				commlogReceived.append(message.getMessageContent());
+			}
+			if(message.getTypeOfMessage().equals("Sent")) {
+				commlogSent.append(message.getMessageContent());
+			}
+		}
+		
+	}
+	public void updateCommLog(Message message) {
+		commlog.append(message + newline);
+		if(message.getTypeOfMessage().equals("Received")) {
+			commlogReceived.append(message.getMessageContent());
+		}
+		if(message.getTypeOfMessage().equals("Sent")) {
+			commlogSent.append(message.getMessageContent());
 		}
 	}
 	/*

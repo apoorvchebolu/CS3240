@@ -65,8 +65,9 @@ public class BluetoothListener extends Thread {
 			String messageNumber = message.substring(messageNumberIndex, messageNumberLength);
 			String messageContent = message.substring(messageSourceIDIndex, message.length());
 			String calculatedChecksum = mainControl.getController().calculateChecksum(messageContent);
-			mainControl.getMessageHolder().addMessage(new Message("Received", message));
-			controlPanel.updateCommLog(mainControl.getMessageHolder().getMessageList());
+			Message receivedMessage = new Message("Received", message);
+			mainControl.getMessageHolder().addMessage(receivedMessage);
+			controlPanel.updateCommLog(receivedMessage);
 			if(calculatedChecksum.equals(receivedChecksum) && messageSourceID == 'R') {
 				
 				switch(opcode) {

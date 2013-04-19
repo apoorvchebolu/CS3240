@@ -223,9 +223,10 @@ public class Controller {
 		} catch (IOException e) {
 			System.out.println(e.toString());
 		}
-		mainControl.getMessageHolder().addMessage(new Message("Sent", message));
+		Message sentMessage = new Message("Sent", message);
+		mainControl.getMessageHolder().addMessage(sentMessage);
 		if(controlPanel != null) {
-			controlPanel.updateCommLog(mainControl.getMessageHolder().getMessageList());
+			controlPanel.updateCommLog(sentMessage);
 		}
 		
 	}
