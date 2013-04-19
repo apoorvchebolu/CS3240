@@ -6,6 +6,7 @@ import lejos.pc.comm.NXTComm;
 
 public class BluetoothListener extends Thread {
 	private MainControl mainControl;
+	private GUI controlPanel;
 	private boolean stopRequest;
 	private NXTComm connection;
 	private DataInputStream connectionInput;
@@ -33,11 +34,12 @@ public class BluetoothListener extends Thread {
 	private final int positionYIndex = 35;
 	private final int positionYLength = 4;
 	private final String malformedMessageError = "h";
-	public BluetoothListener(MainControl m) {
+	public BluetoothListener(MainControl m, GUI controlPanel) {
 		mainControl = m;
 		stopRequest = false;
 		connection = mainControl.getController().getConnection();
 		connectionInput = new DataInputStream(connection.getInputStream());
+		this.controlPanel = controlPanel;
 	}
 	public void run() {
 		while(!stopRequest) {
@@ -64,6 +66,7 @@ public class BluetoothListener extends Thread {
 			String messageContent = message.substring(messageSourceIDIndex, message.length());
 			String calculatedChecksum = mainControl.getController().calculateChecksum(messageContent);
 			mainControl.getMessageHolder().addMessage(new Message("Received", message));
+			controlPanel.updateCommLog(mainControl.getMessageHolder().getMessageList());
 			if(calculatedChecksum.equals(receivedChecksum) && messageSourceID == 'R') {
 				
 				switch(opcode) {

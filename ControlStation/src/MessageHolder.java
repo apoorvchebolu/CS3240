@@ -7,6 +7,9 @@ public class MessageHolder {
 	public MessageHolder() {
 		messageList = new ArrayList<Message>();
 	}
+	public ArrayList<Message> getMessageList() {
+		return messageList;
+	}
 	
 	public void addMessage(Message m) {
 		messageList.add(m);

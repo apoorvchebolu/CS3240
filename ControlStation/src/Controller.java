@@ -10,6 +10,7 @@ public class Controller {
 	private NXTInfo[] info;
 	private MainControl mainControl;
 	private DataOutputStream connectionOutputStream;
+	private GUI controlPanel;
 	private String headerString = "#";
 	private String messageSourceID = "S";
 	private String endString = "" + (char)0;
@@ -217,6 +218,9 @@ public class Controller {
 			System.out.println(e.toString());
 		}
 		mainControl.getMessageHolder().addMessage(new Message("Sent", message));
+		if(controlPanel != null) {
+			controlPanel.updateCommLog(mainControl.getMessageHolder().getMessageList());
+		}
 		
 	}
 	public String calculateChecksum(String messageContent) {
@@ -238,5 +242,8 @@ public class Controller {
 	}
 	public NXTComm getConnection() {
 		return connection;
+	}
+	public void setControlPanel(GUI control) {
+		controlPanel = control;
 	}
 }

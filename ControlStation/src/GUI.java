@@ -255,7 +255,7 @@ public class GUI
 		connect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
-				commlog.append("Connecting..." + newline);
+				//commlog.append("Connecting..." + newline);
 				control.getController().connect();
 				basepane.requestFocusInWindow();
 			}
@@ -276,7 +276,7 @@ public class GUI
 			public void actionPerformed(ActionEvent e)
 			{
 				control.getController().requestSystemStatusData();
-				commlog.append("Requesting data..." + newline);
+				//commlog.append("Requesting data..." + newline);
 				basepane.requestFocusInWindow();
 			}
 		});
@@ -290,7 +290,7 @@ public class GUI
 			public void actionPerformed(ActionEvent e)
 			{
 				//control method goes here once debugger code is added
-				commlog.append("Launched debugger" + newline);
+				//commlog.append("Launched debugger" + newline);
 			}
 		});
 		buttons1.add(debug);
@@ -339,7 +339,7 @@ public class GUI
 				else
 					varspeed = varspeedMIN;
 				speed.setText(varspeed+"");
-				control.getController().setSpeed(varspeed);
+			//	control.getController().setSpeed(varspeed);
 			}
 		});
 		buttons2.add(speeddown);
@@ -352,7 +352,7 @@ public class GUI
 			public void actionPerformed(ActionEvent e)
 			{
 				control.getController().stop();
-				commlog.append("Stopped" + newline);
+			//	commlog.append("Stopped" + newline);
 				basepane.requestFocusInWindow();
 			}
 		});
@@ -366,7 +366,7 @@ public class GUI
 			public void actionPerformed(ActionEvent e)
 			{
 				control.getController().moveForward(false, false);
-				commlog.append("Moving forward..." + newline);
+			//	commlog.append("Moving forward..." + newline);
 				basepane.requestFocusInWindow();
 			}
 		});
@@ -380,7 +380,7 @@ public class GUI
 			public void actionPerformed(ActionEvent e)
 			{
 				control.getController().moveBackward(false, false);
-				commlog.append("Moving backward..." + newline);
+			//	commlog.append("Moving backward..." + newline);
 				basepane.requestFocusInWindow();
 			}
 		});
@@ -394,7 +394,7 @@ public class GUI
 			public void actionPerformed(ActionEvent e)
 			{
 				control.getController().moveLeft();
-				commlog.append("Turning left..." + newline);
+			//	commlog.append("Turning left..." + newline);
 				basepane.requestFocusInWindow();
 			}
 		});
@@ -408,7 +408,7 @@ public class GUI
 			public void actionPerformed(ActionEvent e)
 			{
 				control.getController().moveRight();
-				commlog.append("Turning right..." + newline);
+			//	commlog.append("Turning right..." + newline);
 				basepane.requestFocusInWindow();
 			}
 		});
@@ -421,14 +421,14 @@ public class GUI
 				if(keyCode == KeyEvent.VK_W || keyCode == KeyEvent.VK_UP) {
 					if(!keysCurrentlyPressed.contains("up")) {
 						control.getController().moveForward(false, false);
-						commlog.append("Moving forward..." + newline);
+			//			commlog.append("Moving forward..." + newline);
 						keysCurrentlyPressed.add("up");
 					}
 				}
 				else if(keyCode == KeyEvent.VK_S || keyCode == KeyEvent.VK_DOWN) {
 					if(!keysCurrentlyPressed.contains("down")) {
 						control.getController().moveBackward(false, false);
-						commlog.append("Moving backward..." + newline);
+			//			commlog.append("Moving backward..." + newline);
 						keysCurrentlyPressed.add("down");
 					}
 				}
@@ -444,35 +444,35 @@ public class GUI
 					if(!keysCurrentlyPressed.contains("right")) {
 						keysCurrentlyPressed.add("right");
 						control.getController().moveRight();
-						commlog.append("Turning right..." + newline);
+			//			commlog.append("Turning right..." + newline);
 					}
 				}
 				else if(keyCode == KeyEvent.VK_Q) {
 					if(!keysCurrentlyPressed.contains("curveForwardLeft")) {
 						keysCurrentlyPressed.add("curveForwardLeft");
 						control.getController().moveForward(true, false);
-						commlog.append("Curving forward and left..." + newline);
+			//			commlog.append("Curving forward and left..." + newline);
 					}
 				}
 				else if(keyCode == KeyEvent.VK_E) {
 					if(!keysCurrentlyPressed.contains("curveForwardRight")) {
 						keysCurrentlyPressed.add("curveForwardRight");
 						control.getController().moveForward(false, true);
-						commlog.append("Curving forward and right..." + newline);
+			//			commlog.append("Curving forward and right..." + newline);
 					}
 				}
 				else if(keyCode == KeyEvent.VK_Z) {
 					if(!keysCurrentlyPressed.contains("curveBackwardLeft")) {
 						keysCurrentlyPressed.add("curveBackwardLeft");
 						control.getController().moveBackward(true, false);
-						commlog.append("Curving backward and left..." + newline);
+				//		commlog.append("Curving backward and left..." + newline);
 					}
 				}
 				else if(keyCode == KeyEvent.VK_C) {
 					if(!keysCurrentlyPressed.contains("curveBackwardRight")) {
 						keysCurrentlyPressed.add("curveBackwardRight");
 						control.getController().moveBackward(false, true);
-						commlog.append("Curving backward and right..." + newline);
+				//		commlog.append("Curving backward and right..." + newline);
 					}
 				}
 			}
@@ -506,7 +506,7 @@ public class GUI
 				keysCurrentlyPressed.remove(command);
 				//System.out.println(keysCurrentlyPressed);
 				control.getController().stop();
-				commlog.append("Stopped" + newline);
+		//		commlog.append("Stopped" + newline);
 			}
 			public void keyTyped(KeyEvent e) {
 
@@ -529,13 +529,19 @@ public class GUI
 			//once per second
 			public void actionPerformed(ActionEvent e) {
 				control.getController().requestSystemStatusData();
-				commlog.append("Requesting data..." + newline);
+		//		commlog.append("Requesting data..." + newline);
 			}
 		});
 		systemStatusTimer.start();
 
 		basepane.setOpaque(true);
 		return basepane;
+	}
+	public void updateCommLog(ArrayList<Message> messageList) {
+		commlog.setText("");
+		for(int i = 0; i < messageList.size(); i++) {
+			commlog.append(messageList.get(i).getMessageContent() + newline);
+		}
 	}
 	/*
 	public static void init()
