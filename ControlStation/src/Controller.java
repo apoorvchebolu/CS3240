@@ -62,7 +62,9 @@ public class Controller {
 			String message = messageSourceID + intTo4CharacterString(messageNumber) + opcode;
 			String checksum = calculateChecksum(message);
 			message = headerString + checksum + message + endString;
-			sendMessage(message);
+			Message messageToSend = new Message("Sent", message);
+			messageToSend.setReadableMessageContent("Sent go home command");
+			sendMessage(messageToSend);
 		}
 	}
 	
@@ -73,7 +75,9 @@ public class Controller {
 			String message = messageSourceID + intTo4CharacterString(messageNumber) + opcode;
 			String checksum = calculateChecksum(message);
 			message = headerString + checksum + message + endString;
-			sendMessage(message);
+			Message messageToSend = new Message("Sent", message);
+			messageToSend.setReadableMessageContent("Sent system status request");
+			sendMessage(messageToSend);
 		}
 	}
 	public void turn90Left() {
@@ -103,7 +107,9 @@ public class Controller {
 			String message = messageSourceID + intTo4CharacterString(messageNumber) + opcode + breakpoint;
 			String checksum = calculateChecksum(message);
 			message = headerString + checksum + message + endString;
-			sendMessage(message);
+			Message messageToSend = new Message("Sent", message);
+			messageToSend.setReadableMessageContent("Sent stop command");
+			sendMessage(messageToSend);
 		}
 	}
 	
@@ -111,11 +117,17 @@ public class Controller {
 	public void moveForward(boolean curveLeft, boolean curveRight) {
 		int leftMotorSpeed = robotSpeed;
 		int rightMotorSpeed = robotSpeed;
+		Message messageToSend = new Message();
 		if(curveLeft) {
 			leftMotorSpeed = robotSpeed / curveRatio;
+			messageToSend.setReadableMessageContent("Sent curve forward left command");
 		}
-		if(curveRight) {
+		else if(curveRight) {
 			rightMotorSpeed = robotSpeed / curveRatio;
+			messageToSend.setReadableMessageContent("Sent curve forward right command");
+		}
+		else {
+			messageToSend.setReadableMessageContent("Sent move forward command");
 		}
 		if(connected) {
 			String opcode = "C";
@@ -124,7 +136,9 @@ public class Controller {
 					+ breakpoint + intTo4CharacterString(leftMotorSpeed) + intTo4CharacterString(rightMotorSpeed);
 			String checksum = calculateChecksum(message);
 			message = headerString + checksum + message + endString;
-			sendMessage(message);
+			messageToSend.setMessageContent(message);
+			messageToSend.setMessageType("Sent");
+			sendMessage(messageToSend);
 		}
 	}	
 	
@@ -132,11 +146,17 @@ public class Controller {
 	public void moveBackward(boolean curveLeft, boolean curveRight) {
 		int leftMotorSpeed = robotSpeed;
 		int rightMotorSpeed = robotSpeed;
+		Message messageToSend = new Message();
 		if(curveLeft) {
 			leftMotorSpeed = robotSpeed / curveRatio;
+			messageToSend.setReadableMessageContent("Sent curve backward left command");
 		}
-		if(curveRight) {
+		else if(curveRight) {
 			rightMotorSpeed = robotSpeed / curveRatio;
+			messageToSend.setReadableMessageContent("Sent curve backward right command");
+		}
+		else {
+			messageToSend.setReadableMessageContent("Sent move backward command");
 		}
 		if(connected) {
 			String opcode = "D";
@@ -145,7 +165,9 @@ public class Controller {
 					+ breakpoint + intTo4CharacterString(leftMotorSpeed) + intTo4CharacterString(rightMotorSpeed);
 			String checksum = calculateChecksum(message);
 			message = headerString + checksum + message + endString;
-			sendMessage(message);
+			messageToSend.setMessageContent(message);
+			messageToSend.setMessageType("Sent");
+			sendMessage(messageToSend);
 		}
 	}
 	
@@ -157,7 +179,9 @@ public class Controller {
 			String message = messageSourceID + intTo4CharacterString(messageNumber) + opcode + breakpoint + intTo4CharacterString(robotSpeed);
 			String checksum = calculateChecksum(message);
 			message = headerString + checksum + message + endString;
-			sendMessage(message);
+			Message messageToSend = new Message("Sent", message);
+			messageToSend.setReadableMessageContent("Sent turn left command");
+			sendMessage(messageToSend);
 		}
 	}
 	
@@ -169,7 +193,9 @@ public class Controller {
 			String message = messageSourceID + intTo4CharacterString(messageNumber) + opcode + breakpoint + intTo4CharacterString(robotSpeed);
 			String checksum = calculateChecksum(message);
 			message = headerString + checksum + message + endString;
-			sendMessage(message);
+			Message messageToSend = new Message("Sent", message);
+			messageToSend.setReadableMessageContent("Sent turn right command");
+			sendMessage(messageToSend);
 		}
 	}
 	
@@ -180,7 +206,9 @@ public class Controller {
 			String message = messageSourceID + intTo4CharacterString(messageNumber) + opcode + messageIDParameter;
 			String checksum = calculateChecksum(message);
 			message = headerString + checksum + message + endString;
-			sendMessage(message);
+			Message messageToSend = new Message("Sent", message);
+			messageToSend.setReadableMessageContent("Sent execution response acknowledgment");
+			sendMessage(messageToSend);
 		}
 	}
 	
@@ -191,7 +219,9 @@ public class Controller {
 			String message = messageSourceID + intTo4CharacterString(messageNumber) + opcode + messageIDParameter;
 			String checksum = calculateChecksum(message);
 			message = headerString + checksum + message + endString;
-			sendMessage(message);
+			Message messageToSend = new Message("Sent", message);
+			messageToSend.setReadableMessageContent("Sent system status acknowledgment");
+			sendMessage(messageToSend);
 		}
 	}
 	
@@ -202,7 +232,9 @@ public class Controller {
 			String message = messageSourceID + intTo4CharacterString(messageNumber) + opcode + messageIDParameter;
 			String checksum = calculateChecksum(message);
 			message = headerString + checksum + message + endString;
-			sendMessage(message);
+			Message messageToSend = new Message("Sent", message);
+			messageToSend.setReadableMessageContent("Sent event error acknowledgment");
+			sendMessage(messageToSend);
 		}
 	}	
 	public void eventError(String errorCode, String messageIDParameter) {
@@ -211,22 +243,23 @@ public class Controller {
 			String message = messageSourceID + intTo4CharacterString(messageNumber) + opcode + errorCode + messageIDParameter;
 			String checksum = calculateChecksum(message);
 			message = headerString + checksum + message + endString;
-			sendMessage(message);
+			Message messageToSend = new Message("Sent", message);
+			messageToSend.setReadableMessageContent("Sent event error");
+			sendMessage(messageToSend);
 		}
 	}
 
-	private void sendMessage(String message) {
+	private void sendMessage(Message message) {
 		try {
-			connectionOutputStream.write(message.getBytes());
+			connectionOutputStream.write(message.getMessageContent().getBytes());
 			connectionOutputStream.flush();
 			messageNumber++;
 		} catch (IOException e) {
 			System.out.println(e.toString());
 		}
-		Message sentMessage = new Message("Sent", message);
-		mainControl.getMessageHolder().addMessage(sentMessage);
+		mainControl.getMessageHolder().addMessage(message);
 		if(controlPanel != null) {
-			controlPanel.updateCommLog(sentMessage);
+			controlPanel.updateCommLog(message);
 		}
 		
 	}

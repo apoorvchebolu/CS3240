@@ -560,12 +560,12 @@ public class GUI
 		
 	}
 	public void updateCommLog(Message message) {
-		commlog.append(message.getMessageContent() + newline);
+		commlog.append(message.getReadableMessageContent() + newline);
 		if(message.getTypeOfMessage().equals("Received")) {
-			commlogReceived.append(message.getMessageContent() + newline);
+			commlogReceived.append(message.getReadableMessageContent() + newline);
 		}
 		if(message.getTypeOfMessage().equals("Sent")) {
-			commlogSent.append(message.getMessageContent() + newline);
+			commlogSent.append(message.getReadableMessageContent() + newline);
 		}
 	}
 	/*

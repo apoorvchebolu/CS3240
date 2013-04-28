@@ -65,30 +65,33 @@ public class BluetoothListener extends Thread {
 			String messageNumber = message.substring(messageNumberIndex, messageNumberLength);
 			String messageContent = message.substring(messageSourceIDIndex, message.length());
 			String calculatedChecksum = mainControl.getController().calculateChecksum(messageContent);
-			Message receivedMessage = new Message("Received", message);
-			mainControl.getMessageHolder().addMessage(receivedMessage);
-			controlPanel.updateCommLog(receivedMessage);
-			if(calculatedChecksum.equals(receivedChecksum) && messageSourceID == 'R') {
-				
+			Message receivedMessage = new Message("Received", message);	
+			if(calculatedChecksum.equals(receivedChecksum) && messageSourceID == 'R') {				
 				switch(opcode) {
 				case 'K': //system status data package
 					processSystemStatusData(message);
+					receivedMessage.setReadableMessageContent("Received system status package");
 					mainControl.getController().systemStatusAcknowledgment("" + messageSourceID + messageNumber);
 					break;
 				case 'L': //execution response
+					receivedMessage.setReadableMessageContent("Received execution response");
 					mainControl.getController().executionResponseAcknowledgment("" + messageSourceID + messageNumber);
 					break;
 				case 'M': //event error
+					receivedMessage.setReadableMessageContent("Received event error");
 					mainControl.getController().eventErrorAcknowledgment("" + messageSourceID + messageNumber);
 					break;
 				case 'N': //command acknowledgment
-					//not implemented yet
+					receivedMessage.setReadableMessageContent("Received command acknowledgment");
 					break;
 				default: //unexpected opcode response
+					receivedMessage.setReadableMessageContent("Received unknown opcode");
 					mainControl.getController().eventError(malformedMessageError, "" + messageSourceID + messageNumber);
 					break;
 				}
 			}
+			mainControl.getMessageHolder().addMessage(receivedMessage);
+			controlPanel.updateCommLog(receivedMessage);
 		}
 	}
 	private void processSystemStatusData(String message) { //Helper method to get the robot sensor data
