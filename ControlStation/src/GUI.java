@@ -549,12 +549,12 @@ public class GUI
 		commlogReceived.setText("");
 		for(int i = 0; i < messageList.size(); i++) {
 			Message message = messageList.get(i);
-			commlog.append(message.getMessageContent() + newline);
+			commlog.append(message.getReadableMessageContent() + newline);
 			if(message.getTypeOfMessage().equals("Received")) {
-				commlogReceived.append(message.getMessageContent());
+				commlogReceived.append(message.getReadableMessageContent());
 			}
 			if(message.getTypeOfMessage().equals("Sent")) {
-				commlogSent.append(message.getMessageContent());
+				commlogSent.append(message.getReadableMessageContent());
 			}
 		}
 		
