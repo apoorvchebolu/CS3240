@@ -21,9 +21,11 @@ public class GUI
 	JTextArea commlog, commlogSent, commlogReceived;
 
 	MainControl control;
+	BluetoothListener mainListener;
+	DebuggerInterface debugger;
 
 	int varspeed = 5;
-	static int varspeedMIN = 0;
+	static int varspeedMIN = 2;
 	static int varspeedMAX = 20;
 
 	public GUI(MainControl m)
@@ -295,8 +297,13 @@ public class GUI
 		debug.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
-				//control method goes here once debugger code is added
-				//commlog.append("Launched debugger" + newline);
+				if(mainListener != null) {
+					mainListener.stopThread();
+				}
+				debugger = new DebuggerInterface();
+				debugger.startDebugger(control.getController().getConnection());
+				
+				
 			}
 		});
 		buttons1.add(debug);
@@ -527,6 +534,8 @@ public class GUI
 				touch1data.setText("" + control.getExtSensor().getTouch().getValue());
 				ultradata.setText("" + control.getExtSensor().getUltrasonic().getValue());
 				lightdata.setText("" + control.getExtSensor().getLight().getValue());
+				batterydata.setText("" + control.getIntSensor().getBatteryLife().getValue());
+				signaldata.setText("" + control.getIntSensor().getSignalStrength().getValue());
 			}
 		});
 		timer.start();
@@ -567,6 +576,10 @@ public class GUI
 		if(message.getTypeOfMessage().equals("Sent")) {
 			commlogSent.append(message.getReadableMessageContent() + newline);
 		}
+		
+	}
+	public void setBluetoothListener(BluetoothListener listener) {
+		mainListener = listener;
 	}
 	/*
 	public static void init()

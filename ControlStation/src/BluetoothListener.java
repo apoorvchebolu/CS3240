@@ -113,4 +113,7 @@ public class BluetoothListener extends Thread {
 		mainControl.getIntSensor().getPositionX().setValue(positionX);
 		mainControl.getIntSensor().getPositionY().setValue(positionY);
 	}
+	public void stopThread() {
+		stopRequest = true;
+	}
 }

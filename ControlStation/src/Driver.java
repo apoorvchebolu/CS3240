@@ -6,14 +6,16 @@ public class Driver {
 
 	public static void main(String[] args) { //Responsible for creating the MainControl object as well as creating and
 		//starting the threads for the BluetoothListener and the GUI
-		
 		final MainControl mainControl = new MainControl();
+		
 		/*BluetoothListener mainListener = new BluetoothListener(mainControl);
 		mainListener.start();*/
 		
 		
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
+				
+				
 				JFrame frame = new JFrame("Control Station");
 				GUI controlPanel = new GUI(mainControl);
 				mainControl.getController().setControlPanel(controlPanel);
@@ -23,6 +25,7 @@ public class Driver {
 				frame.setSize(1000,600);
 				frame.setVisible(true);
 				BluetoothListener mainListener = new BluetoothListener(mainControl, controlPanel);
+				controlPanel.setBluetoothListener(mainListener);
 				mainListener.start();
 			}
 		});

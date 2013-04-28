@@ -20,7 +20,7 @@ public class Controller {
 	private int currentRobotAngle;	
 	final private int maxNumberValue = 10000;
 	final private String zeroString = "0000";
-	final private int curveRatio = 4;
+	final private int curveRatio = 2;
 	final private int checksumLength = 2;
 	final private int numberLength = 4;
 	
