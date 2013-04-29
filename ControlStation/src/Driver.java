@@ -8,14 +8,8 @@ public class Driver {
 		//starting the threads for the BluetoothListener and the GUI
 		final MainControl mainControl = new MainControl();
 		
-		/*BluetoothListener mainListener = new BluetoothListener(mainControl);
-		mainListener.start();*/
-		
-		
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-				
-				
 				JFrame frame = new JFrame("Control Station");
 				GUI controlPanel = new GUI(mainControl);
 				mainControl.getController().setControlPanel(controlPanel);
