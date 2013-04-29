@@ -22,7 +22,7 @@ public class GUI
 
 	MainControl control;
 	BluetoothListener mainListener;
-	DebuggerInterface debugger;
+	//DebuggerInterface debugger;
 
 	int varspeed = 5;
 	static int varspeedMIN = 2;
@@ -250,19 +250,18 @@ public class GUI
 		data3.addTab("Received", commlogpaneReceived);
 
 		//buttons
-		connect = new JButton("Connect");
+	/*	connect = new JButton("Connect");
 		connect.setSize(120,110);
 		connect.setLocation(0,0);
 		connect.setFocusable(false);
 		connect.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
-				//commlog.append("Connecting..." + newline);
 				control.getController().connect();
 				basepane.requestFocusInWindow();
 			}
 		});
-		buttons1.add(connect);
+		buttons1.add(connect);*/
 
 		home = new JButton("Home");
 		home.setSize(160,30);
@@ -284,13 +283,12 @@ public class GUI
 			public void actionPerformed(ActionEvent e)
 			{
 				control.getController().requestSystemStatusData();
-				//commlog.append("Requesting data..." + newline);
 				basepane.requestFocusInWindow();
 			}
 		});
 		buttons1.add(requestdata);
 
-		debug = new JButton("Launch Debugger");
+		/*debug = new JButton("Launch Debugger");
 		debug.setSize(160,30);
 		debug.setLocation(150,80);
 		debug.setFocusable(false);
@@ -306,7 +304,7 @@ public class GUI
 				
 			}
 		});
-		buttons1.add(debug);
+		buttons1.add(debug);*/
 
 		speedlabel = new JLabel("Motor Speed");
 		speedlabel.setSize(100,50);
@@ -330,10 +328,12 @@ public class GUI
 		speedup.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{
-				if(varspeed < varspeedMAX-1)
+				if(varspeed < varspeedMAX-1) {
 					varspeed += 1;
-				else
+				}
+				else {
 					varspeed = varspeedMAX;
+				}
 				speed.setText(varspeed+"");
 				control.getController().setSpeed(varspeed);
 			}
@@ -347,12 +347,14 @@ public class GUI
 		speeddown.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e)
 			{				
-				if(varspeed > varspeedMIN+1)
+				if(varspeed > varspeedMIN+1) {
 					varspeed -= 1;
-				else
+				}
+				else {
 					varspeed = varspeedMIN;
+				}
 				speed.setText(varspeed+"");
-			//	control.getController().setSpeed(varspeed);
+				control.getController().setSpeed(varspeed);
 			}
 		});
 		buttons2.add(speeddown);
@@ -365,7 +367,6 @@ public class GUI
 			public void actionPerformed(ActionEvent e)
 			{
 				control.getController().stop();
-			//	commlog.append("Stopped" + newline);
 				basepane.requestFocusInWindow();
 			}
 		});
@@ -379,7 +380,6 @@ public class GUI
 			public void actionPerformed(ActionEvent e)
 			{
 				control.getController().moveForward(false, false);
-			//	commlog.append("Moving forward..." + newline);
 				basepane.requestFocusInWindow();
 			}
 		});
@@ -393,7 +393,6 @@ public class GUI
 			public void actionPerformed(ActionEvent e)
 			{
 				control.getController().moveBackward(false, false);
-			//	commlog.append("Moving backward..." + newline);
 				basepane.requestFocusInWindow();
 			}
 		});
@@ -407,7 +406,6 @@ public class GUI
 			public void actionPerformed(ActionEvent e)
 			{
 				control.getController().moveLeft();
-			//	commlog.append("Turning left..." + newline);
 				basepane.requestFocusInWindow();
 			}
 		});
@@ -421,7 +419,6 @@ public class GUI
 			public void actionPerformed(ActionEvent e)
 			{
 				control.getController().moveRight();
-			//	commlog.append("Turning right..." + newline);
 				basepane.requestFocusInWindow();
 			}
 		});
@@ -434,14 +431,12 @@ public class GUI
 				if(keyCode == KeyEvent.VK_W || keyCode == KeyEvent.VK_UP) {
 					if(!keysCurrentlyPressed.contains("up")) {
 						control.getController().moveForward(false, false);
-			//			commlog.append("Moving forward..." + newline);
 						keysCurrentlyPressed.add("up");
 					}
 				}
 				else if(keyCode == KeyEvent.VK_S || keyCode == KeyEvent.VK_DOWN) {
 					if(!keysCurrentlyPressed.contains("down")) {
 						control.getController().moveBackward(false, false);
-			//			commlog.append("Moving backward..." + newline);
 						keysCurrentlyPressed.add("down");
 					}
 				}
@@ -449,7 +444,6 @@ public class GUI
 					if(!keysCurrentlyPressed.contains("left")) {
 						keysCurrentlyPressed.add("left");						
 						control.getController().moveLeft();
-						//commlog.append("Turning left..." + newline);
 
 					}
 				}
@@ -457,35 +451,30 @@ public class GUI
 					if(!keysCurrentlyPressed.contains("right")) {
 						keysCurrentlyPressed.add("right");
 						control.getController().moveRight();
-			//			commlog.append("Turning right..." + newline);
 					}
 				}
 				else if(keyCode == KeyEvent.VK_Q) {
 					if(!keysCurrentlyPressed.contains("curveForwardLeft")) {
 						keysCurrentlyPressed.add("curveForwardLeft");
 						control.getController().moveForward(true, false);
-			//			commlog.append("Curving forward and left..." + newline);
 					}
 				}
 				else if(keyCode == KeyEvent.VK_E) {
 					if(!keysCurrentlyPressed.contains("curveForwardRight")) {
 						keysCurrentlyPressed.add("curveForwardRight");
 						control.getController().moveForward(false, true);
-			//			commlog.append("Curving forward and right..." + newline);
 					}
 				}
 				else if(keyCode == KeyEvent.VK_Z) {
 					if(!keysCurrentlyPressed.contains("curveBackwardLeft")) {
 						keysCurrentlyPressed.add("curveBackwardLeft");
 						control.getController().moveBackward(true, false);
-				//		commlog.append("Curving backward and left..." + newline);
 					}
 				}
 				else if(keyCode == KeyEvent.VK_C) {
 					if(!keysCurrentlyPressed.contains("curveBackwardRight")) {
 						keysCurrentlyPressed.add("curveBackwardRight");
 						control.getController().moveBackward(false, true);
-				//		commlog.append("Curving backward and right..." + newline);
 					}
 				}
 			}
@@ -517,9 +506,7 @@ public class GUI
 					command = "curveBackwardRight";
 				}
 				keysCurrentlyPressed.remove(command);
-				//System.out.println(keysCurrentlyPressed);
 				control.getController().stop();
-		//		commlog.append("Stopped" + newline);
 			}
 			public void keyTyped(KeyEvent e) {
 
@@ -536,15 +523,16 @@ public class GUI
 				lightdata.setText("" + control.getExtSensor().getLight().getValue());
 				batterydata.setText("" + control.getIntSensor().getBatteryLife().getValue());
 				signaldata.setText("" + control.getIntSensor().getSignalStrength().getValue());
+				xposdata.setText("" + control.getIntSensor().getPositionX().getValue());
+				yposdata.setText("" + control.getIntSensor().getPositionY().getValue());						
 			}
 		});
 		timer.start();
 
-		Timer systemStatusTimer = new Timer(10000, new ActionListener() { //Timer which requests sensor updates
+		Timer systemStatusTimer = new Timer(1000, new ActionListener() { //Timer which requests sensor updates
 			//once per second
 			public void actionPerformed(ActionEvent e) {
 				control.getController().requestSystemStatusData();
-		//		commlog.append("Requesting data..." + newline);
 			}
 		});
 		systemStatusTimer.start();
