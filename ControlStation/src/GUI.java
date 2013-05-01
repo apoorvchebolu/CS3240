@@ -407,7 +407,6 @@ public class GUI {
 					if (!keysCurrentlyPressed.contains("left")) {
 						keysCurrentlyPressed.add("left");
 						control.getController().moveLeft();
-
 					}
 				} else if (keyCode == KeyEvent.VK_D
 						|| keyCode == KeyEvent.VK_RIGHT) {
