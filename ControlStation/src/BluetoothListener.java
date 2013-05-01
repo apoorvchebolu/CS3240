@@ -3,7 +3,6 @@ import java.io.IOException;
 
 import lejos.pc.comm.NXTComm;
 
-
 public class BluetoothListener extends Thread {
 	private MainControl mainControl;
 	private GUI controlPanel;
@@ -34,6 +33,7 @@ public class BluetoothListener extends Thread {
 	private final int positionYIndex = 35;
 	private final int positionYLength = 4;
 	private final String malformedMessageError = "h";
+
 	public BluetoothListener(MainControl m, GUI controlPanel) {
 		mainControl = m;
 		stopRequest = false;
@@ -41,8 +41,9 @@ public class BluetoothListener extends Thread {
 		connectionInput = new DataInputStream(connection.getInputStream());
 		this.controlPanel = controlPanel;
 	}
+
 	public void run() {
-		while(!stopRequest) {
+		while (!stopRequest) {
 			byte[] buffer = new byte[maxMessageSize];
 			int count = 0;
 			try {
@@ -50,43 +51,61 @@ public class BluetoothListener extends Thread {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			if (count>0) {
+			if (count > 0) {
 				String message = (new String(buffer)).trim();
 				processMessage(message);
 			}
 		}
 	}
-	public void processMessage(String message) { //Method to process messages received from the robot
+
+	public void processMessage(String message) { 
+		// Method to process messages received from the robot
 		System.out.println(message);
-		if(message.length() > 8) {
+		if (message.length() > 8) {
 			char opcode = message.charAt(opcodeIndex);
 			char messageSourceID = message.charAt(messageSourceIDIndex);
-			String receivedChecksum = message.substring(checksumIndex, checksumIndex + checksumLength);
-			String messageNumber = message.substring(messageNumberIndex, messageNumberLength);
-			String messageContent = message.substring(messageSourceIDIndex, message.length());
-			String calculatedChecksum = mainControl.getController().calculateChecksum(messageContent);
-			Message receivedMessage = new Message("Received", message);	
-			if(calculatedChecksum.equals(receivedChecksum) && messageSourceID == 'R') {				
-				switch(opcode) {
-				case 'K': //system status data package
+			String receivedChecksum = message.substring(checksumIndex,
+					checksumIndex + checksumLength);
+			String messageNumber = message.substring(messageNumberIndex,
+					messageNumberLength);
+			String messageContent = message.substring(messageSourceIDIndex,
+					message.length());
+			String calculatedChecksum = mainControl.getController()
+					.calculateChecksum(messageContent);
+			Message receivedMessage = new Message("Received", message);
+			if (calculatedChecksum.equals(receivedChecksum)
+					&& messageSourceID == 'R') {
+				switch (opcode) {
+				case 'K': // system status data package
 					processSystemStatusData(message);
-					receivedMessage.setReadableMessageContent("Received system status package");
-					mainControl.getController().systemStatusAcknowledgment("" + messageSourceID + messageNumber);
+					receivedMessage
+							.setReadableMessageContent("Received system status package");
+					mainControl.getController().systemStatusAcknowledgment(
+							"" + messageSourceID + messageNumber);
 					break;
-				case 'L': //execution response
-					receivedMessage.setReadableMessageContent("Received execution response");
-					mainControl.getController().executionResponseAcknowledgment("" + messageSourceID + messageNumber);
+				case 'L': // execution response
+					receivedMessage
+							.setReadableMessageContent("Received execution response");
+					mainControl.getController()
+							.executionResponseAcknowledgment(
+									"" + messageSourceID + messageNumber);
 					break;
-				case 'M': //event error
-					receivedMessage.setReadableMessageContent("Received event error");
-					mainControl.getController().eventErrorAcknowledgment("" + messageSourceID + messageNumber);
+				case 'M': // event error
+					receivedMessage
+							.setReadableMessageContent("Received event error");
+					mainControl.getController().eventErrorAcknowledgment(
+							"" + messageSourceID + messageNumber);
 					break;
-				case 'N': //command acknowledgment
-					receivedMessage.setReadableMessageContent("Received command acknowledgment");
+				case 'N': // command acknowledgment
+					receivedMessage
+							.setReadableMessageContent("Received command acknowledgment");
 					break;
-				default: //unexpected opcode response
-					receivedMessage.setReadableMessageContent("Received unknown opcode");
-					mainControl.getController().eventError(malformedMessageError, "" + messageSourceID + messageNumber);
+				default: // unexpected opcode response
+					receivedMessage
+							.setReadableMessageContent("Received unknown opcode");
+					mainControl.getController().eventError(
+							malformedMessageError,
+							"" + messageSourceID + messageNumber);
 					break;
 				}
 			}
@@ -94,16 +113,27 @@ public class BluetoothListener extends Thread {
 			controlPanel.updateCommLog(receivedMessage);
 		}
 	}
-	private void processSystemStatusData(String message) { //Helper method to get the robot sensor data
-		//from the system status packet and move the data into the correct objects
-		int ultrasonicValue = Integer.parseInt(message.substring(ultrasonicIndex, ultrasonicIndex + ultrasonicLength));
-		int lightValue = Integer.parseInt(message.substring(lightIndex, lightIndex + lightLength));
-		int soundValue = Integer.parseInt(message.substring(soundIndex, soundIndex + soundLength));
-		int touchAValue = Integer.parseInt(message.substring(touchAIndex, touchAIndex + touchALength));
-		int batteryValue = Integer.parseInt(message.substring(batteryIndex, batteryIndex + batteryLength));
-		int signalStrength = Integer.parseInt(message.substring(signalIndex, signalIndex + signalLength));
-		int positionX = Integer.parseInt(message.substring(positionXIndex, positionXIndex + positionXLength));
-		int positionY = Integer.parseInt(message.substring(positionYIndex, positionYIndex + positionYLength));
+
+	private void processSystemStatusData(String message) { 
+		// Helper method to get the robot sensor data
+		// from the system status packet and move the data into the correct
+		// objects
+		int ultrasonicValue = Integer.parseInt(message.substring(
+				ultrasonicIndex, ultrasonicIndex + ultrasonicLength));
+		int lightValue = Integer.parseInt(message.substring(lightIndex,
+				lightIndex + lightLength));
+		int soundValue = Integer.parseInt(message.substring(soundIndex,
+				soundIndex + soundLength));
+		int touchAValue = Integer.parseInt(message.substring(touchAIndex,
+				touchAIndex + touchALength));
+		int batteryValue = Integer.parseInt(message.substring(batteryIndex,
+				batteryIndex + batteryLength));
+		int signalStrength = Integer.parseInt(message.substring(signalIndex,
+				signalIndex + signalLength));
+		int positionX = Integer.parseInt(message.substring(positionXIndex,
+				positionXIndex + positionXLength));
+		int positionY = Integer.parseInt(message.substring(positionYIndex,
+				positionYIndex + positionYLength));
 		mainControl.getExtSensor().getUltrasonic().setValue(ultrasonicValue);
 		mainControl.getExtSensor().getLight().setValue(lightValue);
 		mainControl.getExtSensor().getSound().setValue(soundValue);
@@ -113,6 +143,7 @@ public class BluetoothListener extends Thread {
 		mainControl.getIntSensor().getPositionX().setValue(positionX);
 		mainControl.getIntSensor().getPositionY().setValue(positionY);
 	}
+
 	public void stopThread() {
 		stopRequest = true;
 	}
